@@ -5,6 +5,9 @@ import image1 from "../../Assets/img_nature_wide.png"; // Import images from the
 import image2 from "../../Assets/img_snow_wide.png";
 import image3 from "../../Assets/img_lights_wide.png";
 import { useNavigate } from "react-router-dom";
+import TeacherCard from "../../UI/Card/TeacherCard";
+import TeacherCardUI from "../../UI/Card/TeacherCard";
+import { FilterOutlined } from "@ant-design/icons";
 
 function MainPage() {
   const [slideIndex, setSlideIndex] = useState(1);
@@ -56,6 +59,37 @@ function MainPage() {
     navigate("/teacher-detail");
   };
 
+  const teachers = [
+    {
+      id: 1,
+      name: "Teacher 1",
+      description: "Veteran teacher",
+      image: image1,
+      class: "Class 1",
+    },
+    {
+      id: 2,
+      name: "Teacher 2",
+      description: "Veteran teacher",
+      image: image2,
+      class: "Class 2",
+    },
+    {
+      id: 3,
+      name: "Teacher 3",
+      description: "Veteran teacher",
+      image: image3,
+      class: "Class 3",
+    },
+    {
+      id: 4,
+      name: "Teacher 4",
+      description: "Veteran teacher",
+      image: image1,
+      class: "Class 4",
+    },
+  ];
+
   return (
     <div className="main-page">
       <Sidebar className="Sidebar" />
@@ -88,30 +122,24 @@ function MainPage() {
         </div>
         <div className="search-container">
           <input type="text" placeholder="Search..." className="search-bar" />
-          <button className="filter-button">Filter</button>
+          <button className="filter-button">
+            <FilterOutlined /> Filter
+          </button>
         </div>
-        <h2>Recommend teacher</h2>
+        <h2 className="text-xl font-semibold my-4 uppercase">
+          Recommend teacher
+        </h2>
         <div className="four-divs-container">
-          <div className="inner-div">
-            <img src={image1} alt="Image 1" />
-            <h5 onClick={handleClick}>Teacher 1</h5>
-            <p>Veteran teacher</p>
-          </div>
-          <div className="inner-div">
-            <img src={image2} alt="Image 2" />
-            <h5>Teacher 2</h5>
-            <p>Veteran teacher</p>
-          </div>
-          <div className="inner-div">
-            <img src={image3} alt="Image 3" />
-            <h5>Teacher 3</h5>
-            <p>Veteran teacher</p>
-          </div>
-          <div className="inner-div">
-            <img src={image1} alt="Image 4" />
-            <h5>Teacher 4</h5>
-            <p>Veteran teacher</p>
-          </div>
+          {teachers.map((teacher) => (
+            <TeacherCardUI
+              key={teacher.id}
+              name={teacher.name}
+              description={teacher.description}
+              image={teacher.image}
+              onClick={handleClick}
+              classTeacher={teacher.class}
+            />
+          ))}
         </div>
       </div>
     </div>
