@@ -1,0 +1,68 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+  background-image: url('../../Assets/classroom.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.register-inputs {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.register-inputs h3,
+.register-inputs p {
+  margin: 0 0 1rem 0;
+}
+
+.register-input {
+  margin-bottom: 1.5rem;
+}
+
+.register-input input {
+  width: calc(100% - 20px);
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.register-button {
+  margin-bottom: 1rem;
+}
+
+.register-btn, .register-google-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.register-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.register-google-btn {
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+}
+
+.register-google-btn svg {
+  margin-right: 0.5rem;
+}
