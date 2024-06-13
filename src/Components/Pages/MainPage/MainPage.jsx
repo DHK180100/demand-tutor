@@ -1,12 +1,14 @@
-import React, { useState,useEffect } from 'react';
-import Sidebar from '../Sidebar/Sidebar';
-import './MainPage.css'; // Import CSS file for MainPage
-import image1 from '../../Assets/img_nature_wide.png'; // Import images from the correct relative path
-import image2 from '../../Assets/img_snow_wide.png';
-import image3 from '../../Assets/img_lights_wide.png';
+import React, { useState, useEffect } from "react";
+import Sidebar from "../Sidebar/Sidebar";
+import "./MainPage.css"; // Import CSS file for MainPage
+import image1 from "../../Assets/img_nature_wide.png"; // Import images from the correct relative path
+import image2 from "../../Assets/img_snow_wide.png";
+import image3 from "../../Assets/img_lights_wide.png";
+import { useNavigate } from "react-router-dom";
 
 function MainPage() {
   const [slideIndex, setSlideIndex] = useState(1);
+  const navigate = useNavigate();
 
   const showSlides = (n) => {
     let i;
@@ -15,8 +17,12 @@ function MainPage() {
 
     if (slides.length === 0) return;
 
-    if (n > slides.length) { setSlideIndex(1); }
-    if (n < 1) { setSlideIndex(slides.length); }
+    if (n > slides.length) {
+      setSlideIndex(1);
+    }
+    if (n < 1) {
+      setSlideIndex(slides.length);
+    }
 
     for (i = 0; i < slides.length; i++) {
       slides[i].style.display = "none";
@@ -46,6 +52,10 @@ function MainPage() {
     showSlides(slideIndex);
   }, [slideIndex]);
 
+  const handleClick = () => {
+    navigate("/teacher-detail");
+  };
+
   return (
     <div className="main-page">
       <Sidebar className="Sidebar" />
@@ -63,10 +73,14 @@ function MainPage() {
             <div className="numbertext">3 / 3</div>
             <img src={image3} alt="Slide 3" />
           </div>
-          <a className="prev" onClick={() => plusSlides(-1)}>&#10094;</a>
-          <a className="next" onClick={() => plusSlides(1)}>&#10095;</a>
+          <a className="prev" onClick={() => plusSlides(-1)}>
+            &#10094;
+          </a>
+          <a className="next" onClick={() => plusSlides(1)}>
+            &#10095;
+          </a>
           <br />
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: "center" }}>
             <span className="dot" onClick={() => currentSlide(1)}></span>
             <span className="dot" onClick={() => currentSlide(2)}></span>
             <span className="dot" onClick={() => currentSlide(3)}></span>
@@ -79,22 +93,22 @@ function MainPage() {
         <h2>Recommend teacher</h2>
         <div className="four-divs-container">
           <div className="inner-div">
-            <img src={image1} alt="Image 1"/>
-            <h5>Teacher 1</h5>
+            <img src={image1} alt="Image 1" />
+            <h5 onClick={handleClick}>Teacher 1</h5>
             <p>Veteran teacher</p>
           </div>
           <div className="inner-div">
-            <img src={image2} alt="Image 2"/>
+            <img src={image2} alt="Image 2" />
             <h5>Teacher 2</h5>
             <p>Veteran teacher</p>
           </div>
           <div className="inner-div">
-            <img src={image3} alt="Image 3"/>
+            <img src={image3} alt="Image 3" />
             <h5>Teacher 3</h5>
             <p>Veteran teacher</p>
           </div>
           <div className="inner-div">
-            <img src={image1} alt="Image 4"/>
+            <img src={image1} alt="Image 4" />
             <h5>Teacher 4</h5>
             <p>Veteran teacher</p>
           </div>
