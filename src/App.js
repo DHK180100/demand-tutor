@@ -7,6 +7,9 @@ import Register from './Components/Pages/Register/Register';
 import { Routes, Route } from 'react-router-dom';
 import WithNavbar from './Components/Layout/WithNavbar';
 import WithoutNavbar from './Components/Layout/WithoutNavbar';
+import UserProfilePage from './Components/Pages/ProfilePage/UserProfilePage/UserProfilePage';
+import TutorProfilePage from './Components/Pages/ProfilePage/TutorProfilePage/TutorProfilePage';
+import ScheduleProfile from './Components/Pages/ProfilePage/ScheduleProfile/ScheduleProfile';
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path="/teacher-detail" element={<TeacherDetailPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/UserProfile" element={<UserProfilePage />} />
+        <Route path="/TutorProfile" element={<TutorProfilePage />} />
+        <Route path="/ScheduleProfile" element={<ScheduleProfile />} />
       </Route>
       <Route element={<WithoutNavbar />}>
       </Route>
