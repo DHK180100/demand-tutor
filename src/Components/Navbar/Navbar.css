@@ -23,7 +23,7 @@
     gap: 45px;
 }
 
-.nav-login-button a.button {
+.nav-login-button button.button {
     text-decoration: none;
     width: 90px; /* Reasonable button size */
     height: 42px;
