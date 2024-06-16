@@ -1,8 +1,6 @@
 import React from 'react';
 import './../TutorProfilePage/TutorProfilePage.css';
 import ProfileSideBar from '../ProfileSideBar/ProfileSideBar';
-import classroom_image from 'C:/Users/dante/OneDrive/Desktop/Project/demand-tutor/src/Components/Assets/classroom.png';
-import teacher_image from 'C:/Users/dante/OneDrive/Desktop/Project/demand-tutor/src/Components/Assets/teacher.png';
 
 function ScheduleProfile() {
     const renderCheckboxes = () => {
@@ -25,12 +23,12 @@ function ScheduleProfile() {
                 <div className="tutor-profile-content">
                     <div className="tutor-fixed-row">
                         <div className="tutor-image-container">
-                            <img src={classroom_image} alt="Classroom" className="classroom-profile-image" />
+                            <img src="./src/Components/Assets/classroom.png" alt="Classroom" className="classroom-profile-image" />
                         </div>
                     </div>
                     <div className="tutor-row">
                         <div className="tutor-profile">
-                            <img src={teacher_image} alt="Classroom" className="tutor-profile-image rounded-image" />
+                            <img src="./src/Components/Assets/teacher.png" alt="Classroom" className="tutor-profile-image rounded-image" />
                         </div>
                         <div className='tutor-profile-details'>
                             <h3>Alexa Rowles</h3>

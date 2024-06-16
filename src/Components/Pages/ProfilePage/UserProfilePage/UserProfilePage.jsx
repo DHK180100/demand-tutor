@@ -1,8 +1,6 @@
 import React from 'react';
 import ProfileSideBar from '../ProfileSideBar/ProfileSideBar';
 import './UserProfilePage.css';
-import classroom_image from 'C:/Users/dante/OneDrive/Desktop/Project/demand-tutor/src/Components/Assets/classroom.png';
-import teacher_image from 'C:/Users/dante/OneDrive/Desktop/Project/demand-tutor/src/Components/Assets/teacher.png';
 import { MdOutlineEmail } from "react-icons/md";
 
 function UserProfilePage() {
@@ -12,12 +10,12 @@ function UserProfilePage() {
       <div className="user-profile-content">
         <div className="fixed-row">
           <div className="image-container">
-            <img src={classroom_image} alt="Classroom" className="profile-image" />
+            <img src="./src/Components/Assets/classroom.png" alt="Classroom" className="profile-image" />
           </div>
         </div>
         <div className="row">
           <div className="user-profile">
-            <img src={teacher_image} alt="Classroom" className="user-profile-image rounded-image" />
+            <img src="./src/Components/Assets/teacher.png" alt="Classroom" className="user-profile-image rounded-image" />
           </div>
           <div className='profile-details'>
             <h3>Alexa Rowles</h3>
