@@ -70,6 +70,81 @@
     color: #666;
 }
 
+.tutor-profile-input-row {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.tutor-profile-input-bars {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tutor-profile-input-bars div {
+    width: 48%;
+}
+
+.tutor-profile-input-bars label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.tutor-profile-input-bars input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.tutor-additional-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.add-image {
+    margin-bottom: 10px;
+}
+
+.add-image label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.add-image button {
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.send-button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.send-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
 .tutor-toggle-container {
     display: flex;
     align-items: center;
