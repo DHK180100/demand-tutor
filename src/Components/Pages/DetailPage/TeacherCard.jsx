@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Button, Rate } from "antd";
+import { Button, Rate, Modal, Select, Input, InputNumber } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import TeacherClasses from "./TeacherClasses";
 
@@ -80,6 +80,24 @@ const HireButton = styled(Button)`
   }
 `;
 
+const PaymentOption = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  padding: 10px;
+  border-radius: 8px;
+`;
+
+const PaymentImage = styled.img`
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+`;
+
 const TeacherCard = ({
   name,
   hours,
@@ -88,6 +106,34 @@ const TeacherCard = ({
   rating,
   status,
 }) => {
+  const [isHireModalVisible, setIsHireModalVisible] = useState(false);
+  const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
+  const [hireDuration, setHireDuration] = useState("1 hour");
+  const [message, setMessage] = useState("");
+  const [currentBalance, setCurrentBalance] = useState(128000);
+
+  const showHireModal = () => {
+    setIsHireModalVisible(true);
+  };
+
+  const handleHireOk = () => {
+    setIsHireModalVisible(false);
+    setIsPaymentModalVisible(true);
+  };
+
+  const handleHireCancel = () => {
+    setIsHireModalVisible(false);
+  };
+
+  const handlePaymentOk = () => {
+    setIsPaymentModalVisible(false);
+    // Handle payment confirmation
+  };
+
+  const handlePaymentCancel = () => {
+    setIsPaymentModalVisible(false);
+  };
+
   return (
     <CardContainer>
       <div>
@@ -137,7 +183,7 @@ const TeacherCard = ({
           <p className="text-gray-400 ml-4"> 50 Rating</p>
         </div>
         <ActionButtons>
-          <HireButton>HIRE</HireButton>
+          <HireButton onClick={showHireModal}>HIRE</HireButton>
           <Button
             className="w-[90%] mt-6 text-xl font-semibold h-[40px]"
             type="default"
@@ -146,6 +192,73 @@ const TeacherCard = ({
           </Button>
         </ActionButtons>
       </div>
+      <Modal
+        title="Hire Tutor"
+        visible={isHireModalVisible}
+        onOk={handleHireOk}
+        onCancel={handleHireCancel}
+        footer={[
+          <Button key="back" onClick={handleHireCancel}>
+            Close
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleHireOk}>
+            Hire
+          </Button>,
+        ]}
+      >
+        <div>
+          <p>Tutor Name: {name}</p>
+          <div>
+            <label>Time to Hire: </label>
+            <Select
+              value={hireDuration}
+              onChange={(value) => setHireDuration(value)}
+            >
+              <Select.Option value="1 hour">1 hour</Select.Option>
+              <Select.Option value="2 hours">2 hours</Select.Option>
+              <Select.Option value="3 hours">3 hours</Select.Option>
+            </Select>
+          </div>
+          <p>
+            Cost: {price} <span> đ</span>
+          </p>
+          <div>
+            <span>Current balance: </span>
+            <InputNumber
+              value={currentBalance}
+              onChange={(value) => setCurrentBalance(value)}
+            />
+            <span className="ml-2">đ</span>
+          </div>
+          <Input.TextArea
+            className="mt-4"
+            rows={4}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type a message..."
+          />
+        </div>
+      </Modal>
+      <Modal
+        title="Deposit"
+        visible={isPaymentModalVisible}
+        onOk={handlePaymentOk}
+        onCancel={handlePaymentCancel}
+        footer={[
+          <Button key="back" onClick={handlePaymentCancel}>
+            Close
+          </Button>,
+        ]}
+      >
+        <PaymentOption>
+          <PaymentImage
+            src="https://static.mservice.io/img/logo-momo.png"
+            alt="Momo QR code"
+          />
+          <p>Momo QR code</p>
+        </PaymentOption>
+        {/* Add more payment options here if needed */}
+      </Modal>
     </CardContainer>
   );
 };

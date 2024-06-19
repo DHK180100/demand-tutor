@@ -72,7 +72,7 @@ const SignInContainer = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     `;
 
-const BaseURL = "http://localhost:8080/api"
+const BaseURL = "http://localhost:8080/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -84,22 +84,22 @@ const Login = () => {
   const onFinish = async (values) => {
     try {
       const response = await fetch(`${BaseURL}/authenticate`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify(values),
       });
 
       if (response && response.ok) {
         const data = await response.json();
         document.cookie = `token=${data.id_token};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
-        window.history.pushState({}, '', '/');
-        window.location.reload()
+        window.history.pushState({}, "", "/");
+        window.location.reload();
       }
     } catch (error) {
-      console.error('Error:', error);
-      return
+      console.error("Error:", error);
+      return;
     }
   };
 
