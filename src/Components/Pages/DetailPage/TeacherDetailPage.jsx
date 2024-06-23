@@ -17,7 +17,7 @@ const TeacherDetailPage = () => {
         name="Teacher name"
         hours="500"
         completionRate="95.5"
-        price="30,000"
+        price={30000}
         rating={4}
         status="Ready"
       />

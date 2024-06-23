@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Button, Rate, Modal, Select, Input, InputNumber } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import TeacherClasses from "./TeacherClasses";
+import { formatCurrency, getCookie } from "../../../utils/common";
 
 const CardContainer = styled.div`
   display: flex;
@@ -98,6 +99,9 @@ const PaymentImage = styled.img`
   margin-right: 10px;
 `;
 
+const token = getCookie("token");
+
+
 const TeacherCard = ({
   name,
   hours,
@@ -108,17 +112,65 @@ const TeacherCard = ({
 }) => {
   const [isHireModalVisible, setIsHireModalVisible] = useState(false);
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
-  const [hireDuration, setHireDuration] = useState("1 hour");
+  const [hireDuration, setHireDuration] = useState(1);
   const [message, setMessage] = useState("");
-  const [currentBalance, setCurrentBalance] = useState(128000);
+  const [profileData, setProfileData] = useState(null)
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`http://42.116.248.123:8080/api/app-users/GetCurrentAppUser`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setProfileData(data)
+        return
+      }
+      setProfileData(null)
+    })()
+  }, []);
+
+  const hireCost = useMemo(() => { return price * hireDuration }, [hireDuration, price])
 
   const showHireModal = () => {
     setIsHireModalVisible(true);
   };
 
-  const handleHireOk = () => {
+  const handleHireOk = async () => {
     setIsHireModalVisible(false);
-    setIsPaymentModalVisible(true);
+    const values = {
+      timeHire: hireDuration,
+      totalPrice: hireCost,
+      appUser: {
+        id: profileData.id
+      },
+      tutor: {
+        id: 2
+      }
+    }
+    if (profileData.wallet.amount < hireCost) return setIsPaymentModalVisible(true);
+    try {
+      const response = await fetch('http://42.116.248.123:8080/api/hire-tutors/hireTutor', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(values),
+      });
+      if (response && response.ok) {
+        //handle success
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error:", error);
+      return;
+    }
+
   };
 
   const handleHireCancel = () => {
@@ -211,25 +263,20 @@ const TeacherCard = ({
           <div>
             <label>Time to Hire: </label>
             <Select
-              value={hireDuration}
-              onChange={(value) => setHireDuration(value)}
+              value={`${hireDuration} hours`}
+              onChange={(value) => setHireDuration(parseInt(value))}
             >
-              <Select.Option value="1 hour">1 hour</Select.Option>
-              <Select.Option value="2 hours">2 hours</Select.Option>
-              <Select.Option value="3 hours">3 hours</Select.Option>
+              <Select.Option value="1">1 hour</Select.Option>
+              <Select.Option value="2">2 hours</Select.Option>
+              <Select.Option value="3">3 hours</Select.Option>
             </Select>
           </div>
           <p>
-            Cost: {price} <span> đ</span>
+            Cost: {formatCurrency(hireCost)}
           </p>
-          <div>
-            <span>Current balance: </span>
-            <InputNumber
-              value={currentBalance}
-              onChange={(value) => setCurrentBalance(value)}
-            />
-            <span className="ml-2">đ</span>
-          </div>
+          {profileData && profileData.wallet && <div>
+            <span>Current balance: {formatCurrency(profileData.wallet.amount || 0)}</span>
+          </div>}
           <Input.TextArea
             className="mt-4"
             rows={4}
