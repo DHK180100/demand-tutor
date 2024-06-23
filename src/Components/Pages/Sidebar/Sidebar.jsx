@@ -10,55 +10,31 @@ function Sidebar() {
       <ul>
         <li>
           <img src={signal_png} />
-          Class 1
+          Toán
         </li>
         <li>
           <img src={signal_png} />
-          Class 2
+          Lý
         </li>
         <li>
           <img src={signal_png} />
-          Class 3
+          Hóa
         </li>
         <li>
           <img src={signal_png} />
-          Class 4
+          Sử
         </li>
         <li>
           <img src={signal_png} />
-          Class 5
+          Văn
         </li>
         <li>
           <img src={signal_png} />
-          Class 6
+          Địa
         </li>
         <li>
           <img src={signal_png} />
-          Class 7
-        </li>
-        <li>
-          <img src={signal_png} />
-          Class 8
-        </li>
-        <li>
-          <img src={signal_png} />
-          Class 9
-        </li>
-        <li>
-          <img src={signal_png} />
-          Class 10
-        </li>
-        <li>
-          <img src={signal_png} />
-          Class 11
-        </li>
-        <li>
-          <img src={signal_png} />
-          Class 12
-        </li>
-        <li>
-          <img src={signal_png} />
-          Class 12
+          Anh
         </li>
         <li>
           <img src={signal_png} />
