@@ -84,46 +84,39 @@ const notifications = (
   </Menu>
 );
 
-const menu = (
-  <Menu>
-    <Menu.Item key="1" icon={<SettingOutlined />}>
-      <Link to="/UserProfile">Profile Settings</Link>
-    </Menu.Item>
-    <Menu.Item key="2" icon={<ProfileOutlined />}>
-      <Link to="/TutorProfile">Tutor Profile</Link>
-    </Menu.Item>
-    <Menu.Item key="3" icon={<ScheduleOutlined />}>
-      <Link to="/ScheduleProfile">Schedule Profile</Link>
-    </Menu.Item>
-    <Menu.Item key="4" icon={<WalletOutlined />}>
-      <Link to="/wallet">My Wallet</Link>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="5" icon={<LogoutOutlined />}>
-      <p className="font-semibold text-cyan-700">Logout</p>
-    </Menu.Item>
-  </Menu>
-);
 
 function Navbar() {
   const [token, setToken] = useState(null);
-  const [username, setUsername] = useState("John Doe");
-  const [walletBalance, setWalletBalance] = useState(128000);
-
-  const handleLogin = () => {
-    setToken("fakeToken"); // Fake token for demonstration
-  };
+  const [profileData, setProfileData] = useState(null)
 
   const handleLogout = () => {
     setToken(null);
+    document.cookie = "token" + "=; Max-Age=-99999999;";
+    window.history.pushState({}, "", "/");
+    window.location.reload();
   };
 
   useEffect(() => {
     const token = getCookie("token");
     setToken(token);
+    (async () => {
+      const response = await fetch(`http://42.116.248.123:8080/api/app-users/GetCurrentAppUser`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setProfileData(data)
+        return
+      }
+      setProfileData(null)
+    })()
   }, []);
 
-  const handleClick = () => {
+  const handleLogin = () => {
     if (!token) {
       window.history.pushState({}, "", "/login");
       window.dispatchEvent(new PopStateEvent("popstate"));
@@ -142,7 +135,7 @@ function Navbar() {
         </Link>
       </NavLogo>
       <NavMenu>
-        {token && (
+        {token && profileData && profileData.wallet && (
           <>
             <Dropdown
               overlay={notifications}
@@ -156,12 +149,43 @@ function Navbar() {
             <Link to="/wallet">
               <WalletBalance>
                 <WalletOutlined />
-                <span>{walletBalance.toLocaleString()} đ</span>
+                <span>{profileData.wallet.amount.toLocaleString()} đ</span>
               </WalletBalance>
             </Link>
           </>
         )}
-        {!token ? (
+        {token && profileData && profileData.user ? (
+          <Dropdown overlay={
+            <Menu>
+              <Menu.Item key="1" icon={<SettingOutlined />}>
+                <Link to="/UserProfile">Profile Settings</Link>
+              </Menu.Item>
+              <Menu.Item key="2" icon={<ProfileOutlined />}>
+                <Link to="/TutorProfile">Tutor Profile</Link>
+              </Menu.Item>
+              <Menu.Item key="3" icon={<ScheduleOutlined />}>
+                <Link to="/ScheduleProfile">Schedule Profile</Link>
+              </Menu.Item>
+              <Menu.Item key="4" icon={<WalletOutlined />}>
+                <Link to="/wallet">My Wallet</Link>
+              </Menu.Item>
+              <Menu.Divider />
+              <Menu.Item key="5" icon={<LogoutOutlined />} onClick={handleLogout}>
+                <p className="font-semibold text-cyan-700">Logout</p>
+              </Menu.Item>
+            </Menu>
+          } trigger={["click"]}>
+            <UserButton>
+              <Avatar
+                style={{ backgroundColor: "rgb(14 116 144)" }}
+                icon={<UserOutlined />}
+              />
+              <span className="ml-2 font-semibold text-cyan-700">
+                {profileData.user.firstName}&nbsp;{profileData.user.lastName}
+              </span>
+            </UserButton>
+          </Dropdown>
+        ) : (
           <>
             <Link to="/login">
               <NavButton type="primary" onClick={handleLogin}>
@@ -172,18 +196,6 @@ function Navbar() {
               <NavButton>Sign Up</NavButton>
             </Link>
           </>
-        ) : (
-          <Dropdown overlay={menu} trigger={["click"]}>
-            <UserButton>
-              <Avatar
-                style={{ backgroundColor: "rgb(14 116 144)" }}
-                icon={<UserOutlined />}
-              />
-              <span className="ml-2 font-semibold text-cyan-700">
-                {username}
-              </span>
-            </UserButton>
-          </Dropdown>
         )}
       </NavMenu>
     </NavbarContainer>

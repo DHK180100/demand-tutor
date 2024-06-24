@@ -72,7 +72,7 @@ const SignInContainer = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     `;
 
-const BaseURL = "http://localhost:8080/api";
+const BaseURL = "http://42.116.248.123:8080/api";
 
 const Login = () => {
   const navigate = useNavigate();
