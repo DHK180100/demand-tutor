@@ -4,6 +4,7 @@ import { Button, Rate, Modal, Select, Input, InputNumber } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import TeacherClasses from "./TeacherClasses";
 import { formatCurrency, getCookie } from "../../../utils/common";
+import { API_URL } from "../../../config";
 
 const CardContainer = styled.div`
   display: flex;
@@ -118,7 +119,7 @@ const TeacherCard = ({
 
   useEffect(() => {
     (async () => {
-      const response = await fetch(`http://42.116.248.123:8080/api/app-users/GetCurrentAppUser`, {
+      const response = await fetch(`${API_URL}/app-users/GetCurrentAppUser`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -154,7 +155,7 @@ const TeacherCard = ({
     }
     if (profileData.wallet.amount < hireCost) return setIsPaymentModalVisible(true);
     try {
-      const response = await fetch('http://42.116.248.123:8080/api/hire-tutors/hireTutor', {
+      const response = await fetch(`${API_URL}/hire-tutors/hireTutor`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

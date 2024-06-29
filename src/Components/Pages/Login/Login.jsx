@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import styled from "styled-components";
 import logo from "../../Assets/logo.png"; // Ensure this path is correct
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../../../config";
 
 const Container = styled.div`
   display: flex;
@@ -72,7 +73,6 @@ const SignInContainer = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     `;
 
-const BaseURL = "http://42.116.248.123:8080/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -83,7 +83,7 @@ const Login = () => {
 
   const onFinish = async (values) => {
     try {
-      const response = await fetch(`${BaseURL}/authenticate`, {
+      const response = await fetch(`${API_URL}/authenticate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

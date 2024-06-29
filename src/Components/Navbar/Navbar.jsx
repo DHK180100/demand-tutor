@@ -14,6 +14,7 @@ import styled from "styled-components";
 
 import "./Navbar.css";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../config";
 
 export const getCookie = (name) => {
   const nameEQ = name + "=";
@@ -100,7 +101,7 @@ function Navbar() {
     const token = getCookie("token");
     setToken(token);
     (async () => {
-      const response = await fetch(`http://42.116.248.123:8080/api/app-users/GetCurrentAppUser`, {
+      const response = await fetch(`${API_URL}/app-users/GetCurrentAppUser`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
