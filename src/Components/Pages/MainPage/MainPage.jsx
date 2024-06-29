@@ -8,10 +8,28 @@ import { useNavigate } from "react-router-dom";
 import TeacherCard from "../../UI/Card/TeacherCard";
 import TeacherCardUI from "../../UI/Card/TeacherCard";
 import { FilterOutlined } from "@ant-design/icons";
+import { API_URL } from "../../../config";
 
 function MainPage() {
   const [slideIndex, setSlideIndex] = useState(1);
+  const [teacherData, setTeacherData] = useState(null)
   const navigate = useNavigate();
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${API_URL}/app-users/GetAllRecommend`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setTeacherData(data)
+        return
+      }
+      setTeacherData(null)
+    })()
+  }, []);
 
   const showSlides = (n) => {
     let i;
@@ -59,36 +77,6 @@ function MainPage() {
     navigate("/teacher-detail");
   };
 
-  const teachers = [
-    {
-      id: 1,
-      name: "Teacher 1",
-      description: "Veteran teacher",
-      image: image1,
-      class: "Class 1",
-    },
-    {
-      id: 2,
-      name: "Teacher 2",
-      description: "Veteran teacher",
-      image: image2,
-      class: "Class 2",
-    },
-    {
-      id: 3,
-      name: "Teacher 3",
-      description: "Veteran teacher",
-      image: image3,
-      class: "Class 3",
-    },
-    {
-      id: 4,
-      name: "Teacher 4",
-      description: "Veteran teacher",
-      image: image1,
-      class: "Class 4",
-    },
-  ];
 
   return (
     <div className="main-page">
@@ -130,14 +118,14 @@ function MainPage() {
           Recommend teacher
         </h2>
         <div className="four-divs-container">
-          {teachers.map((teacher) => (
+          {teacherData && teacherData.map((teacher) => (
             <TeacherCardUI
               key={teacher.id}
-              name={teacher.name}
-              description={teacher.description}
-              image={teacher.image}
+              name={`${teacher.user.firstName} ${teacher.user.lastName}`}
+              description={teacher.tutor.status}
+              image={teacher.user.imageUrl}
               onClick={handleClick}
-              classTeacher={teacher.class}
+              classTeacher={teacher.walletAddress}
             />
           ))}
         </div>

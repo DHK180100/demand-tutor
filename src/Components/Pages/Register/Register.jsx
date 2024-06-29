@@ -39,12 +39,13 @@
 
 // export default Register;
 
-import React from "react";
+import React, { useState } from "react";
 import { Form, Button, Input } from "antd";
 import { FcGoogle } from "react-icons/fc";
 import styled from "styled-components";
 import logo from "../../Assets/logo.png"; // Ensure this path is correct
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../../../config";
 
 const Container = styled.div`
   display: flex;
@@ -115,6 +116,33 @@ const SignInContainer = styled.div`
 
 const Register = () => {
   const navigate = useNavigate();
+  const [login, setLogin] = useState('')
+  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch(`${API_URL}/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        login,
+        password,
+        email,
+        langKey: "en",
+      }),
+    });
+    // const data = await response.json();
+    if (response && response.ok) {
+      window.history.pushState({}, '', '/login');
+      window.location.reload()
+
+    }
+    console.log('response', response);
+  };
 
   const handleGoogleSignIn = () => {
     console.log("Google Sign-In");
@@ -151,16 +179,23 @@ const Register = () => {
                 name="email"
                 rules={[{ required: true, message: "Vui lòng nhập email!" }]}
               >
-                <Input className="h-10" placeholder="Email" />
+                <Input className="h-10" placeholder="Email"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} />
               </Form.Item>
 
               <Form.Item
-                name="username"
+                name="login"
                 rules={[
                   { required: true, message: "Vui lòng nhập tên đăng nhập!" },
                 ]}
               >
-                <Input className="h-10" placeholder="Tên đăng nhập" />
+                <Input className="h-10" placeholder="Tên đăng nhập"
+                  type="text"
+                  value={login}
+                  onChange={(e) => setLogin(e.target.value)}
+                />
               </Form.Item>
 
               <Form.Item
@@ -191,6 +226,9 @@ const Register = () => {
                 <Input.Password
                   className="h-10"
                   placeholder="Xác nhận mật khẩu"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Item>
 
@@ -199,6 +237,7 @@ const Register = () => {
                   type="primary"
                   htmlType="submit"
                   className="w-full text-base h-10 font-semibold"
+                  onClick={handleSubmit}
                 >
                   Đăng ký
                 </Button>
@@ -229,7 +268,7 @@ const Register = () => {
           </SignInContainer>
         </div>
       </Half>
-    </Container>
+    </Container >
   );
 };
 
