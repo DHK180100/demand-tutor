@@ -24,22 +24,22 @@ const InfoContent = styled.div`
   line-height: 1.5;
 `;
 
-const TeacherInfo = () => {
+const TeacherInfo = ({ information }) => {
   return (
     <InfoContainer>
       <div>
         <InfoTitle>Thông tin giới thiệu</InfoTitle>
         <InfoContent>
-          <p className="my-2">Xin chào các phụ huynh và các em học sinh!</p>
-          <p className="my-2">
+          <p className="my-2">{information}</p>
+          {/* <p className="my-2">
             Tôi là Cô Giáo Mai Trần, một giáo viên tiểu học tận tâm và đam mê
             với nghề nghiệp giáo dục. Với hơn 10 năm kinh nghiệm trong lĩnh vực
             giảng dạy, tôi tin rằng mỗi đứa trẻ đều có tiềm năng riêng và quyền
             được phát triển toàn diện trong một môi trường học tập an toàn, đầy
             đủ yêu thương và hỗ trợ.
-          </p>
+          </p> */}
           {/* Add the rest of the information content here */}
-          <p className="my-2">Về Tôi:</p>
+          {/* <p className="my-2">Về Tôi:</p>
           <div className="ml-4">
             <li className="list-dist">
               Học vị: Bằng cử nhân Sư phạm Tiểu học, Đại học Sư phạm TP.HCM.
@@ -73,7 +73,7 @@ const TeacherInfo = () => {
               Khuyến khích sự phát triển toàn diện của học sinh trong các mảng
               như nghệ thuật, thể chất và tinh thần.
             </li>
-          </div>
+          </div> */}
         </InfoContent>
       </div>
       <div className="mt-20 flex items-center">

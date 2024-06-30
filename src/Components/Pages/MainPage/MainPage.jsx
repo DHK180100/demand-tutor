@@ -73,8 +73,8 @@ function MainPage() {
     showSlides(slideIndex);
   }, [slideIndex]);
 
-  const handleClick = () => {
-    navigate("/teacher-detail");
+  const handleClick = (id) => {
+    navigate(`/teacher-detail/${id}`);
   };
 
 
@@ -124,7 +124,7 @@ function MainPage() {
               name={`${teacher.user.firstName} ${teacher.user.lastName}`}
               description={teacher.tutor.status}
               image={teacher.user.imageUrl}
-              onClick={handleClick}
+              onClick={() => handleClick(teacher.id)}
               classTeacher={teacher.walletAddress}
             />
           ))}

@@ -16,7 +16,7 @@ function App() {
     <Routes>
       <Route element={<WithNavbar />}>
         <Route path="/" element={<MainPage />} />
-        <Route path="/teacher-detail" element={<TeacherDetailPage />} />
+        <Route path="/teacher-detail/:id" element={<TeacherDetailPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/UserProfile" element={<UserProfilePage />} />

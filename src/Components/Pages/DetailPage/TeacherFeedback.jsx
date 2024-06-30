@@ -17,21 +17,21 @@ const feedbackData = [
   // Add more feedback items here as needed
 ];
 
-const TeacherFeedback = () => {
+const TeacherFeedback = ({ ratings }) => {
   return (
     <div className="mt-8 w-full max-w-[1100px]">
       <h2 className="text-2xl font-semibold my-8">Feedback</h2>
       <div className="space-y-4 mx-4">
-        {feedbackData.map((feedback, index) => (
+        {ratings.map((rating, index) => (
           <div key={index} className="flex justify-between items-start">
             <div>
-              <p className="text-sm text-gray-500">{feedback.date}</p>
-              <h3 className="font-bold text-gray-700">{feedback.name}</h3>
-              <p className="ml-2 my-2">{feedback.comment}</p>
+              <p className="text-sm text-gray-500">{rating.date}</p>
+              <h3 className="font-bold text-gray-700">{rating.name}</h3>
+              <p className="ml-2 my-2">{rating.comment}</p>
             </div>
             <div className="flex flex-col items-center">
-              <Rate disabled defaultValue={feedback.rating} />
-              <span className="text-sm text-gray-500">(hire 1h)</span>
+              <Rate disabled defaultValue={rating.rating} />
+              <span className="text-sm text-gray-500">{`(hire ${rating.hours}h)`}</span>
             </div>
           </div>
         ))}

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button, Rate, Modal, Select, Input, InputNumber } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import TeacherClasses from "./TeacherClasses";
-import { formatCurrency, getCookie } from "../../../utils/common";
+import { formatCurrency, getToken } from "../../../utils/common";
 import { API_URL } from "../../../config";
 
 const CardContainer = styled.div`
@@ -100,7 +100,7 @@ const PaymentImage = styled.img`
   margin-right: 10px;
 `;
 
-const token = getCookie("token");
+const token = getToken("token");
 
 
 const TeacherCard = ({
@@ -110,6 +110,7 @@ const TeacherCard = ({
   price,
   rating,
   status,
+  ratingAmount,
 }) => {
   const [isHireModalVisible, setIsHireModalVisible] = useState(false);
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
@@ -194,7 +195,7 @@ const TeacherCard = ({
           src="https://lsvn.vn/storage/uploads/files/1014/6013c1d703084.jpg"
           alt="Teacher"
         />
-        <p className="text-green-500 font-semibold text-center my-2">Ready</p>
+        <p className={`font-semibold text-center my-2 ${status === "BUSY" ? 'text-red-500' : 'text-green-500'}`}>{status}</p>
       </div>
       <TeacherInfo>
         <TeacherName>
@@ -233,7 +234,7 @@ const TeacherCard = ({
         <Price>{price} đ/h</Price>
         <div className="flex">
           <Rate disabled defaultValue={rating} />
-          <p className="text-gray-400 ml-4"> 50 Rating</p>
+          <p className="text-gray-400 ml-4">{ratingAmount} Ratings</p>
         </div>
         <ActionButtons>
           <HireButton onClick={showHireModal}>HIRE</HireButton>

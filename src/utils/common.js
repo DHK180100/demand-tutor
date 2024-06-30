@@ -5,7 +5,7 @@ export const formatCurrency = (money) => {
         .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}đ`;
 };
 
-export const getCookie = (name) => {
+export const getToken = (name) => {
     const nameEQ = name + "=";
     const ca = document.cookie.split(";");
     for (let i = 0; i < ca.length; i++) {

@@ -16,7 +16,7 @@ import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { API_URL } from "../../config";
 
-export const getCookie = (name) => {
+export const getToken = (name) => {
   const nameEQ = name + "=";
   const ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {
@@ -98,7 +98,7 @@ function Navbar() {
   };
 
   useEffect(() => {
-    const token = getCookie("token");
+    const token = getToken("token");
     setToken(token);
     (async () => {
       const response = await fetch(`${API_URL}/app-users/GetCurrentAppUser`, {
