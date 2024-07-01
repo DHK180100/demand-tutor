@@ -9,6 +9,7 @@ import {
   ScheduleOutlined,
   BellOutlined,
 } from "@ant-design/icons";
+import { BiSolidWallet } from "react-icons/bi";
 import logo from "../Assets/logo.png";
 import styled from "styled-components";
 
@@ -85,10 +86,9 @@ const notifications = (
   </Menu>
 );
 
-
 function Navbar() {
   const [token, setToken] = useState(null);
-  const [profileData, setProfileData] = useState(null)
+  const [profileData, setProfileData] = useState(null);
 
   const handleLogout = () => {
     setToken(null);
@@ -105,16 +105,16 @@ function Navbar() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response && response.ok) {
         const data = await response.json();
-        setProfileData(data)
-        return
+        setProfileData(data);
+        return;
       }
-      setProfileData(null)
-    })()
+      setProfileData(null);
+    })();
   }, []);
 
   const handleLogin = () => {
@@ -156,26 +156,29 @@ function Navbar() {
           </>
         )}
         {token && profileData && profileData.user ? (
-          <Dropdown overlay={
-            <Menu>
-              <Menu.Item key="1" icon={<SettingOutlined />}>
-                <Link to="/UserProfile">Profile Settings</Link>
-              </Menu.Item>
-              <Menu.Item key="2" icon={<ProfileOutlined />}>
-                <Link to="/TutorProfile">Tutor Profile</Link>
-              </Menu.Item>
-              <Menu.Item key="3" icon={<ScheduleOutlined />}>
-                <Link to="/ScheduleProfile">Schedule Profile</Link>
-              </Menu.Item>
-              <Menu.Item key="4" icon={<WalletOutlined />}>
-                <Link to="/wallet">My Wallet</Link>
-              </Menu.Item>
-              <Menu.Divider />
-              <Menu.Item key="5" icon={<LogoutOutlined />} onClick={handleLogout}>
-                <p className="font-semibold text-cyan-700">Logout</p>
-              </Menu.Item>
-            </Menu>
-          } trigger={["click"]}>
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key="1" icon={<SettingOutlined />}>
+                  <Link to="/UserProfile">Profile Settings</Link>
+                </Menu.Item>
+                <Menu.Item key="2" icon={<ProfileOutlined />}>
+                  <Link to="/TutorProfile">Tutor Profile</Link>
+                </Menu.Item>
+                <Menu.Item key="3" icon={<ScheduleOutlined />}>
+                  <Link to="/ScheduleProfile">Schedule Profile</Link>
+                </Menu.Item>
+                <Menu.Item key="4" icon={<WalletOutlined />}>
+                  <Link to="/wallet">My Wallet</Link>
+                </Menu.Item>
+                <Menu.Divider />
+                <Menu.Item key="5" icon={<LogoutOutlined />} onClick={handleLogout}>
+                  <p className="font-semibold text-cyan-700">Logout</p>
+                </Menu.Item>
+              </Menu>
+            }
+            trigger={["click"]}
+          >
             <UserButton>
               <Avatar
                 style={{ backgroundColor: "rgb(14 116 144)" }}
@@ -198,6 +201,9 @@ function Navbar() {
             </Link>
           </>
         )}
+        <Link to="/wallet">
+          <NavButton icon={<BiSolidWallet />} />
+        </Link>
       </NavMenu>
     </NavbarContainer>
   );
