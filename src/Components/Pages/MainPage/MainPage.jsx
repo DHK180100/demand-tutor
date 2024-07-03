@@ -77,7 +77,7 @@ function MainPage() {
     navigate(`/teacher-detail/${id}`);
   };
 
-
+  console.log('teacherData', teacherData);
   return (
     <div className="main-page">
       <Sidebar className="Sidebar" />
@@ -119,14 +119,14 @@ function MainPage() {
         </h2>
         <div className="four-divs-container">
           {teacherData && teacherData.map((teacher) => (
-            <TeacherCardUI
+            teacher.user ? <TeacherCardUI
               key={teacher.id}
               name={`${teacher.user.firstName} ${teacher.user.lastName}`}
               description={teacher.tutor.status}
-              image={teacher.user.imageUrl}
+              // image={teacher.user.imageUrl}
               onClick={() => handleClick(teacher.id)}
               classTeacher={teacher.walletAddress}
-            />
+            /> : <></>
           ))}
         </div>
       </div>
