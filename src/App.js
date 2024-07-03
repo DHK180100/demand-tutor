@@ -3,7 +3,8 @@ import MainPage from './Components/Pages/MainPage/MainPage';
 import TeacherDetailPage from './Components/Pages/DetailPage/TeacherDetailPage';
 import Login from './Components/Pages/Login/Login';
 import Register from './Components/Pages/Register/Register';
-import WalletPage from './Components/Pages/WalletPage/WalletPage'; // Corrected path to WalletPage
+import WalletPage from './Components/Pages/WalletPage/WalletPage';
+import AdminPage from './Components/Pages/Admin/AdminPage'; // Import the AdminPage component
 import { Routes, Route } from 'react-router-dom';
 import WithNavbar from './Components/Layout/WithNavbar';
 import WithoutNavbar from './Components/Layout/WithoutNavbar';
@@ -20,9 +21,12 @@ function App() {
         <Route path="/UserProfile" element={<UserProfilePage />} />
         <Route path="/TutorProfile" element={<TutorProfilePage />} />
         <Route path="/ScheduleProfile" element={<ScheduleProfile />} />
-        <Route path="/wallet" element={<WalletPage />} /> {/* New Wallet Page Route */}
-        <Route path="/login" element={<Login />} /> {/* Login Route */}
-        <Route path="/register" element={<Register />} /> {/* Register Route */}
+        <Route path="/wallet" element={<WalletPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
+      <Route element={<WithNavbar />}> {/* Admin Page with Navbar */}
+        <Route path="/admin" element={<AdminPage />} />
       </Route>
     </Routes>
   );
