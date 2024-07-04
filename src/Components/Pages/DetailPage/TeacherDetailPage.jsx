@@ -36,7 +36,7 @@ const TeacherDetailPage = () => {
       }
     })()
   }, [id]);
-
+  console.log("tutor", tutor)
   if (!tutor) return <></>
   return (
     <div className="teacher-detail-page container mx-auto p-4">
@@ -44,18 +44,18 @@ const TeacherDetailPage = () => {
         <BreadcrumbWithBackButton currentTab={"Thông tin chi tiết giáo viên"} />
       </div>
       <TeacherCard
-        name="Teacher name"
+        name={`${tutor.firstName} ${tutor.lastName}`}
         hours={`${tutor.totalHoursHired}`}
         completionRate={`${tutor.percentSuccess}`}
         price={tutor.price}
         rating={tutor.averageRating}
-        ratingAmount={tutor.rating.length}
+        ratingAmount={tutor.cusrating.length}
         status={`${tutor.status}`}
       />
 
       <TeacherInfo information={tutor.tutorDetails.information} />
       <TeacherVideo videoUrl={tutor.tutorDetails.tutorVideo.media.url} />
-      <TeacherFeedback ratings={tutor.rating} />
+      <TeacherFeedback ratings={tutor.cusrating} />
     </div>
   );
 };

@@ -18,11 +18,12 @@ const feedbackData = [
 ];
 
 const TeacherFeedback = ({ ratings }) => {
+  console.log("ratings", ratings)
   return (
     <div className="mt-8 w-full max-w-[1100px]">
       <h2 className="text-2xl font-semibold my-8">Feedback</h2>
       <div className="space-y-4 mx-4">
-        {ratings.map((rating, index) => (
+        {ratings && ratings.length > 0 && ratings.map((rating, index) => (
           <div key={index} className="flex justify-between items-start">
             <div>
               <p className="text-sm text-gray-500">{rating.date}</p>

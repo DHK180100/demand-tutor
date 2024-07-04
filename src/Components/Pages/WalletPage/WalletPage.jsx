@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Tabs } from 'antd';
+import { API_URL } from '../../../config';
+import { getToken } from "../../../utils/common";
 
 const { TabPane } = Tabs;
 
@@ -67,6 +69,36 @@ const WalletPage = () => {
     ]);
   }, []);
 
+
+  const [transactions, setTransactions] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = getToken("token")
+        console.log('token', token);
+        const response = await fetch(`${API_URL}/wallets/transactions`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Network was not response ok');
+        }
+        console.log("response", response)
+        const data = await response.json();
+        setTransactions(data);
+      }
+      catch (err) {
+        setTransactions(null);
+      }
+    })()
+  }, []);
+  console.log("transactions", transactions)
+  if (!transactions) return <></>
+
   return (
     <WalletContainer>
       <Tabs defaultActiveKey="1">
@@ -117,4 +149,8 @@ const WalletPage = () => {
   );
 };
 
+const TransactionHistory = () => {
+
+
+};
 export default WalletPage;

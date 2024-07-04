@@ -31,6 +31,8 @@ function MainPage() {
     })()
   }, []);
 
+  console.log("teacherData", teacherData)
+
   const showSlides = (n) => {
     let i;
     let slides = document.getElementsByClassName("mySlides");
@@ -123,7 +125,7 @@ function MainPage() {
               key={teacher.id}
               name={`${teacher.user.firstName} ${teacher.user.lastName}`}
               description={teacher.tutor.status}
-              // image={teacher.user.imageUrl}
+              image={teacher.user.imageUrl}
               onClick={() => handleClick(teacher.id)}
               classTeacher={teacher.walletAddress}
             /> : <></>
