@@ -46,8 +46,36 @@ export const deleteTutor = async (tutorId) => {
 
 export const getPendingUsers = async () => {
   return [
-    { id: 1, name: 'User 1', email: 'user1@example.com' },
-    { id: 2, name: 'User 2', email: 'user2@example.com' },
+    {
+      id: 1,
+      name: 'User 1',
+      email: 'user1@example.com',
+      universityGraduate: 'Harvard',
+      class: '2024',
+      studentId: '123456',
+      graduationYear: '2024',
+      major: 'Computer Science',
+      academicRank: 'First Class',
+      identityCard: 'ID Card 1',
+      universityDegreeCertificate: 'Degree Certificate 1',
+      masterDegreeCertificate: 'Master Degree Certificate 1',
+      secondaryDegreeCertificate: 'Secondary Degree Certificate 1',
+    },
+    {
+      id: 2,
+      name: 'User 2',
+      email: 'user2@example.com',
+      universityGraduate: 'MIT',
+      class: '2023',
+      studentId: '654321',
+      graduationYear: '2023',
+      major: 'Mechanical Engineering',
+      academicRank: 'Second Class',
+      identityCard: 'ID Card 2',
+      universityDegreeCertificate: 'Degree Certificate 2',
+      masterDegreeCertificate: 'Master Degree Certificate 2',
+      secondaryDegreeCertificate: 'Secondary Degree Certificate 2',
+    },
   ];
 };
 
