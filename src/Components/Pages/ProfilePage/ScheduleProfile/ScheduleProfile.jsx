@@ -4,18 +4,18 @@ import ProfileSideBar from '../ProfileSideBar/ProfileSideBar';
 import classroom_image from '../../../Assets/classroom.png';
 import teacher_image from '../../../Assets/teacher.png';
 
+const subjects = [
+    'Toán', 'Lý', 'Hóa', 'Sử', 'Văn', 'Địa', 'Anh', 'Khác'
+];
+
 function ScheduleProfile() {
-    const renderCheckboxes = () => {
-        const checkboxes = [];
-        for (let i = 1; i <= 24; i++) {
-            checkboxes.push(
-                <div key={i} className="checkbox-item">
-                    <input type="checkbox" id={`hour-${i}`} name={`hour-${i}`} />
-                    <label htmlFor={`hour-${i}`}>{`${i}:00`}</label>
-                </div>
-            );
-        }
-        return checkboxes;
+    const renderSubjectCheckboxes = () => {
+        return subjects.map((subject, index) => (
+            <div key={index} className="checkbox-item">
+                <input type="checkbox" id={`subject-${index}`} name={`subject-${index}`} />
+                <label htmlFor={`subject-${index}`}>{subject}</label>
+            </div>
+        ));
     };
 
     return (
@@ -46,8 +46,8 @@ function ScheduleProfile() {
                             </label>
                         </div>
                     </div>
-                    <div className="hour-checkboxes-container">
-                        {renderCheckboxes()}
+                    <div className="subject-checkboxes-container">
+                        {renderSubjectCheckboxes()}
                     </div>
                     <div className="introduce-yourself-container">
                         <h3>Introduce yourself</h3>
