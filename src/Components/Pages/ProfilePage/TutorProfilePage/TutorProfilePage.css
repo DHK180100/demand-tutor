@@ -209,7 +209,7 @@ input:checked + .slider:before {
     transform: translateX(14px);
 }
 
-.hour-checkboxes-container {
+.subject-checkboxes-container {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 10px;
@@ -297,6 +297,48 @@ input:checked + .slider:before {
     font-size: 16px;
     cursor: pointer;
     background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.follow-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.follow-info-item {
+    flex: 1;
+    text-align: center;
+}
+
+.follow-info-item h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.follow-info-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.follow-button-container {
+    flex: 1;
+    text-align: center;
+}
+
+.follow-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 5px;
