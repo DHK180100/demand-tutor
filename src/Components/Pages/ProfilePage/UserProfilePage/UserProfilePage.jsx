@@ -1,11 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ProfileSideBar from '../ProfileSideBar/ProfileSideBar';
 import './UserProfilePage.css';
 import classroom_image from '../../../Assets/classroom.png';
 import teacher_image from '../../../Assets/teacher.png';
 import { MdOutlineEmail } from "react-icons/md";
+import { API_URL } from '../../../../config';
+import { getToken } from '../../../../utils/common';
+
+
 
 function UserProfilePage() {
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = getToken("token")
+        console.log('token', token)
+        const response = await fetch(`${API_URL}/app-users/getUserProfile`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setUser(data);
+        // console.log("user", user)
+      } catch (err) {
+        setUser(null);
+      }
+    })()
+  },);
+  if (!user) return <></>
+
   return (
     <div className="user-profile-container">
       <ProfileSideBar />

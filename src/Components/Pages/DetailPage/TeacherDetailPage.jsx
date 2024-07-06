@@ -49,7 +49,7 @@ const TeacherDetailPage = () => {
         completionRate={`${tutor.percentSuccess}`}
         price={tutor.price}
         rating={tutor.averageRating}
-        ratingAmount={tutor.cusrating.length}
+        // ratingAmount={tutor.cusrating.length}
         status={`${tutor.status}`}
       />
 
