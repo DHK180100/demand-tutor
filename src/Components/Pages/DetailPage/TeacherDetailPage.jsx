@@ -44,6 +44,7 @@ const TeacherDetailPage = () => {
         <BreadcrumbWithBackButton currentTab={"Thông tin chi tiết giáo viên"} />
       </div>
       <TeacherCard
+        id={tutor.id}
         name={`${tutor.firstName} ${tutor.lastName}`}
         hours={`${tutor.totalHoursHired}`}
         completionRate={`${tutor.percentSuccess}`}

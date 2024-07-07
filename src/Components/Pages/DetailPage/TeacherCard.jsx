@@ -120,6 +120,7 @@ const PaymentImage = styled.img`
 const token = getToken("token");
 
 const TeacherCard = ({
+  id,
   name,
   hours,
   completionRate,
@@ -135,6 +136,7 @@ const TeacherCard = ({
   const [message, setMessage] = useState("");
   const [profileData, setProfileData] = useState(null)
 
+  console.log("profileData", profileData)
   useEffect(() => {
     (async () => {
       const response = await fetch(`${API_URL}/app-users/GetCurrentAppUser`, {
@@ -170,7 +172,7 @@ const TeacherCard = ({
         id: profileData.id,
       },
       tutor: {
-        id: 2
+        id: id
       }
     }
     if (profileData.wallet.amount < hireCost) return setIsPaymentModalVisible(true);

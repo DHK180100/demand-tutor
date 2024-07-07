@@ -67,11 +67,6 @@ function TutorProfilePage() {
                 </div>
                 <div className='tutor-additional-info'>
                     <div className='add-image'>
-                        <label>Identity Card</label>
-                        <br />
-                        <button>+Add Image</button>
-                    </div>
-                    <div className='add-image'>
                         <label>University Degree Certificate</label>
                         <br />
                         <button>+Add Image</button>

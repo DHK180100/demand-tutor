@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal } from 'antd';
 import { getPendingUsers, approveUser, rejectUser } from '../../../api'; // Correct path to api.js
+import { API_URL } from '../../../config';
 
 const ApproveUsers = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [confirmData, setConfirmData] = useState([]);
   useEffect(() => {
     fetchPendingUsers();
+    (async () => {
+      const response = await fetch(`${API_URL}/app-users/GetAllConfirming`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setConfirmData(data)
+        return
+      }
+      setConfirmData(null)
+    })()
   }, []);
-
+  console.log("confirmData", confirmData)
   const fetchPendingUsers = async () => {
     const data = await getPendingUsers();
     setPendingUsers(data);
@@ -40,8 +55,8 @@ const ApproveUsers = () => {
   };
 
   const columns = [
-    { title: 'ID', dataIndex: 'id', key: 'id' },
-    { title: 'Name', dataIndex: 'name', key: 'name' },
+    { title: 'ID', dataIndex: 'appUserid', key: 'appUserid' },
+    { title: 'Name', dataIndex: 'login', key: 'login' },
     { title: 'Email', dataIndex: 'email', key: 'email' },
     {
       title: 'Actions',
@@ -58,7 +73,7 @@ const ApproveUsers = () => {
 
   return (
     <>
-      <Table dataSource={pendingUsers} columns={columns} />
+      <Table dataSource={confirmData} columns={columns} />
       {selectedUser && (
         <Modal
           title="Tutor Details"
@@ -66,7 +81,7 @@ const ApproveUsers = () => {
           onOk={handleOk}
           onCancel={handleCancel}
         >
-          <p>Name: {selectedUser.name}</p>
+          <p>Name: {selectedUser.login}</p>
           <p>Email: {selectedUser.email}</p>
           <p>University Graduate: {selectedUser.universityGraduate}</p>
           <p>Class: {selectedUser.class}</p>
