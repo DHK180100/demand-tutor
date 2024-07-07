@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ProfileSideBar from '../ProfileSideBar/ProfileSideBar';
 import './TutorProfilePage.css';
 import classroom_image from '../../../Assets/classroom.png';
 import teacher_image from '../../../Assets/teacher.png';
+import { getToken } from '../../../../utils/common';
+import { API_URL } from '../../../../config';
 
 function TutorProfilePage() {
+    const [tutorProfile, setTutorProfile] = useState(null)
+    useEffect(() => {
+        (async () => {
+            try {
+                const token = getToken("token")
+                console.log('token', token)
+                const response = await fetch(`${API_URL}/app-users/getAllCertifycate`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setTutorProfile(data);
+
+
+            } catch (err) {
+                setTutorProfile(null);
+            }
+        })()
+    }, []);
+    console.log("tutorProfile", tutorProfile)
+    if (!tutorProfile) return <></>
     return (
         <div className="tutor-profile-container">
             <ProfileSideBar />
@@ -28,7 +58,7 @@ function TutorProfilePage() {
                         <div className='tutor-profile-university-graduate-input-bar'>
                             <label>University Graduate</label>
                             <br />
-                            <input type='text' placeholder='University Graduate' />
+                            <input type='text' placeholder='University Graduate' value={tutorProfile.school} />
                         </div>
                         <div className='tutor-profile-class-input-bar'>
                             <label>Class</label>
@@ -42,12 +72,12 @@ function TutorProfilePage() {
                         <div className='tutor-profile-student-id-input-bar'>
                             <label>Student ID</label>
                             <br />
-                            <input type='text' placeholder='Student ID' />
+                            <input type='text' placeholder='Student ID' value={tutorProfile.studentID} />
                         </div>
                         <div className='tutor-profile-graduation-year-input-bar'>
                             <label>Graduation Year</label>
                             <br />
-                            <input type='text' placeholder='Graduation Year' />
+                            <input type='text' placeholder='Graduation Year' value={tutorProfile.year} />
                         </div>
                     </div>
                 </div>
@@ -56,7 +86,7 @@ function TutorProfilePage() {
                         <div className='tutor-profile-major-input-bar'>
                             <label>Major</label>
                             <br />
-                            <input type='text' placeholder='Major' />
+                            <input type='text' placeholder='Major' value={tutorProfile.major} />
                         </div>
                         <div className='tutor-profile-academic-rank-input-bar'>
                             <label>Academic Rank</label>
