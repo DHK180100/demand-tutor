@@ -1,49 +1,51 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
+import { Link } from 'react-router-dom';
 import './ProfileSideBar.css';
 
 function ProfileSideBar() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
-  const [isTutorOpen, setIsTutorOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   const toggleAccount = () => {
     setIsAccountOpen(!isAccountOpen);
   };
 
-  const toggleTutor = () => {
-    setIsTutorOpen(!isTutorOpen);
-  };
-
   return (
-    <div className="sidebar">
-      <div className="tab" onClick={toggleAccount}>
-        Account
+    <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
+      <div className="toggle-button" onClick={toggleSidebar}>
+        {isSidebarOpen ? '<<' : '>>'}
       </div>
-      <Collapse isOpened={isAccountOpen}>
-        <ul className="list">
-          <li className="list-item">User Profile</li>
-          <li className="list-item">Tutor Followed</li>
-          <li className="list-item">Option</li>
-          <li className="list-item">History</li>
-          <li className="list-item">Deposit</li>
-          <li className="list-item">Withdraw</li>
-        </ul>
-      </Collapse>
-
-      <div className="tab" onClick={toggleTutor}>
-        Tutor
-      </div>
-      <Collapse isOpened={isTutorOpen}>
-        <ul className="list">
-          <li className="list-item">General</li>
-          <li className="list-item">Best Followed</li>
-          <li className="list-item">Album</li>
-          <li className="list-item">Video</li>
-          <li className="list-item">Wallet</li>
-          <li className="list-item">Hired History</li>
-          <li className="list-item">Setup Hire</li>
-        </ul>
-      </Collapse>
+      {isSidebarOpen && (
+        <>
+          <div className="tab" onClick={toggleAccount}>
+            Account
+          </div>
+          <Collapse isOpened={isAccountOpen}>
+            <ul className="list">
+              <li className="list-item">
+                <Link to="/UserProfile">User Profile</Link>
+              </li>
+              <li className="list-item">
+                <Link to="/TutorProfile">Tutor Profile</Link>
+              </li>
+              <li className="list-item">
+                <Link to="/ScheduleProfile">Schedule Profile</Link>
+              </li>
+              <li className="list-item">
+                <Link to="/wallet">Wallet</Link>
+              </li>
+              <li className="list-item">
+                <Link to="/IdentityCard">Identity Card</Link>
+              </li>
+            </ul>
+          </Collapse>
+        </>
+      )}
     </div>
   );
 }

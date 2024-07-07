@@ -4,13 +4,15 @@ import TeacherDetailPage from './Components/Pages/DetailPage/TeacherDetailPage';
 import Login from './Components/Pages/Login/Login';
 import Register from './Components/Pages/Register/Register';
 import WalletPage from './Components/Pages/WalletPage/WalletPage';
-import AdminPage from './Components/Pages/Admin/AdminPage'; // Import the AdminPage component
+import AdminPage from './Components/Pages/Admin/AdminPage';
 import { Routes, Route } from 'react-router-dom';
 import WithNavbar from './Components/Layout/WithNavbar';
 import WithoutNavbar from './Components/Layout/WithoutNavbar';
 import UserProfilePage from './Components/Pages/ProfilePage/UserProfilePage/UserProfilePage';
 import TutorProfilePage from './Components/Pages/ProfilePage/TutorProfilePage/TutorProfilePage';
 import ScheduleProfile from './Components/Pages/ProfilePage/ScheduleProfile/ScheduleProfile';
+import IdentityCardPage from './Components/Pages/IdentityCard/IdentityCardPage';
+
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
         <Route path="/TutorProfile" element={<TutorProfilePage />} />
         <Route path="/ScheduleProfile" element={<ScheduleProfile />} />
         <Route path="/wallet" element={<WalletPage />} />
+        <Route path="/IdentityCard" element={<IdentityCardPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
