@@ -8,7 +8,6 @@ import { API_URL } from "../../../config";
 
 const CardContainer = styled.div`
   display: flex;
-  // align-items: center;
   background-color: white;
   border: 1px solid #eaeaea;
   padding: 16px;
@@ -45,8 +44,9 @@ const TeacherName = styled.h2`
 
 const Info = styled.div`
   display: flex;
-  jussify-content: space-between;
-  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
   margin-bottom: 8px;
 `;
 
@@ -54,6 +54,8 @@ const InfoItem = styled.div`
   margin-right: 16px;
   font-size: 1rem;
   color: #555;
+  text-align: center;
+  flex: 1 0 21%; /* Adjust as needed */
 `;
 
 const Price = styled.div`
@@ -64,6 +66,8 @@ const Price = styled.div`
 `;
 
 const ActionButtons = styled.div`
+  display: flex;
+  flex-direction: column;
   align-items: center;
   margin-top: 30px;
 `;
@@ -75,9 +79,22 @@ const HireButton = styled(Button)`
   width: 90%;
   background-color: #ff4d4f;
   color: white;
-  margin-right: 8px;
+  margin-bottom: 10px;
   &:hover {
     background-color: #ff7875;
+    color: white;
+  }
+`;
+
+const FollowButton = styled(Button)`
+  height: 40px;
+  font-weight: 600;
+  font-size: 1.25rem;
+  width: 90%;
+  background-color: #ffa500;
+  color: white;
+  &:hover {
+    background-color: #ffcc00;
     color: white;
   }
 `;
@@ -102,7 +119,6 @@ const PaymentImage = styled.img`
 
 const token = getToken("token");
 
-
 const TeacherCard = ({
   name,
   hours,
@@ -111,32 +127,35 @@ const TeacherCard = ({
   rating,
   status,
   ratingAmount,
+  followers,
 }) => {
   const [isHireModalVisible, setIsHireModalVisible] = useState(false);
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
   const [hireDuration, setHireDuration] = useState(1);
   const [message, setMessage] = useState("");
   const [profileData, setProfileData] = useState(null)
-  // const [tutor, setTutor] = useState("")
+
   useEffect(() => {
     (async () => {
       const response = await fetch(`${API_URL}/app-users/GetCurrentAppUser`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response && response.ok) {
         const data = await response.json();
-        setProfileData(data)
-        return
+        setProfileData(data);
+        return;
       }
-      setProfileData(null)
-    })()
+      setProfileData(null);
+    })();
   }, []);
 
-  const hireCost = useMemo(() => { return price * hireDuration }, [hireDuration, price])
+  const hireCost = useMemo(() => {
+    return price * hireDuration;
+  }, [hireDuration, price]);
 
   const showHireModal = () => {
     setIsHireModalVisible(true);
@@ -148,10 +167,10 @@ const TeacherCard = ({
       timeHire: hireDuration,
       totalPrice: hireCost,
       appUser: {
-        id: profileData.id
+        id: profileData.id,
       },
       tutor: {
-        id: 7
+        id: 2
       }
     }
     if (profileData.wallet.amount < hireCost) return setIsPaymentModalVisible(true);
@@ -160,7 +179,7 @@ const TeacherCard = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(values),
       });
@@ -172,7 +191,6 @@ const TeacherCard = ({
       console.error("Error:", error);
       return;
     }
-
   };
 
   const handleHireCancel = () => {
@@ -188,6 +206,11 @@ const TeacherCard = ({
     setIsPaymentModalVisible(false);
   };
 
+  const handleFollow = () => {
+    // Implement follow action here
+    console.log("Follow button clicked");
+  };
+
   return (
     <CardContainer>
       <div>
@@ -195,7 +218,12 @@ const TeacherCard = ({
           src="https://lsvn.vn/storage/uploads/files/1014/6013c1d703084.jpg"
           alt="Teacher"
         />
-        <p className={`font-semibold text-center my-2 ${status === "BUSY" ? 'text-red-500' : 'text-green-500'}`}>{status}</p>
+        <p
+          className={`font-semibold text-center my-2 ${status === "BUSY" ? "text-red-500" : "text-green-500"
+            }`}
+        >
+          {status}
+        </p>
       </div>
       <TeacherInfo>
         <TeacherName>
@@ -206,21 +234,19 @@ const TeacherCard = ({
         </TeacherName>
         <Info>
           <InfoItem>
-            <p className="text-lg font-bold my-2 text-gray-500">
-              Already rented
-            </p>
+            <p className="text-lg font-bold my-2 text-gray-500">Already rented</p>
             <p className="text-red-500">{hours} hours</p>
           </InfoItem>
           <InfoItem>
-            <p className="text-lg font-bold my-2 text-gray-500">
-              Completion rate
-            </p>
+            <p className="text-lg font-bold my-2 text-gray-500">Completion rate</p>
             <p className="text-red-500">{completionRate}%</p>
           </InfoItem>
           <InfoItem>
-            <p className="text-lg font-bold my-2 text-gray-500">
-              Device status
-            </p>
+            <p className="text-lg font-bold my-2 text-gray-500">Followers</p>
+            <p className="text-red-500">{followers}</p>
+          </InfoItem>
+          <InfoItem>
+            <p className="text-lg font-bold my-2 text-gray-500">Device status</p>
             <p role="img" aria-label="microphone" className="text-red-500">
               🎤
             </p>
@@ -244,6 +270,7 @@ const TeacherCard = ({
           >
             CHAT
           </Button>
+          <FollowButton onClick={handleFollow}>FOLLOW</FollowButton>
         </ActionButtons>
       </div>
       <Modal
@@ -273,12 +300,14 @@ const TeacherCard = ({
               <Select.Option value="3">3 hours</Select.Option>
             </Select>
           </div>
-          <p>
-            Cost: {formatCurrency(hireCost)}
-          </p>
-          {profileData && profileData.wallet && <div>
-            <span>Current balance: {formatCurrency(profileData.wallet.amount || 0)}</span>
-          </div>}
+          <p>Cost: {formatCurrency(hireCost)}</p>
+          {profileData && profileData.wallet && (
+            <div>
+              <span>
+                Current balance: {formatCurrency(profileData.wallet.amount || 0)}
+              </span>
+            </div>
+          )}
           <Input.TextArea
             className="mt-4"
             rows={4}
