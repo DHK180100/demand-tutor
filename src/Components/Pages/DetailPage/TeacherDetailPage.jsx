@@ -19,6 +19,7 @@ const TeacherDetailPage = () => {
       try {
         const token = getToken("token")
         console.log('token', token);
+        console.log('id', id)
         const response = await fetch(`${API_URL}/tutors/GetCustom/${id}`, {
           method: "GET",
           headers: {
@@ -44,18 +45,20 @@ const TeacherDetailPage = () => {
         <BreadcrumbWithBackButton currentTab={"Thông tin chi tiết giáo viên"} />
       </div>
       <TeacherCard
-        id={tutor.id}
-        name={`${tutor.firstName} ${tutor.lastName}`}
-        hours={`${tutor.totalHoursHired}`}
-        completionRate={`${tutor.percentSuccess}`}
+        tutorID={tutor.tutorID}
+        firstName={`${tutor.firstName} ${tutor.lastName}`}
+        totalHoursHired={`${tutor.totalHoursHired}`}
+        percentSuccess={`${tutor.percentSuccess}`}
         price={tutor.price}
-        rating={tutor.averageRating}
+        rating={tutor.averageRate}
         // ratingAmount={tutor.cusrating.length}
         status={`${tutor.status}`}
+      // teach={`${tutor.teach.subject}`}
+
       />
 
-      <TeacherInfo information={tutor.tutorDetails.information} />
-      <TeacherVideo videoUrl={tutor.tutorDetails.tutorVideo.media.url} />
+      <TeacherInfo information={tutor.information} />
+      <TeacherVideo videoUrl={tutor.videoUrl} />
       <TeacherFeedback ratings={tutor.cusrating} />
     </div>
   );

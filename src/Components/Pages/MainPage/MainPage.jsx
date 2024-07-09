@@ -117,18 +117,18 @@ function MainPage() {
           </button>
         </div>
         <h2 className="text-xl font-semibold my-4 uppercase">
-          Recommend teacher
+          Recommend Teacher
         </h2>
         <div className="four-divs-container">
           {teacherData && teacherData.map((teacher) => (
-            teacher.user ? <TeacherCardUI
-              key={teacher.id}
-              name={`${teacher.user.firstName} ${teacher.user.lastName}`}
-              description={teacher.tutor.status}
-              image={teacher.user.imageUrl}
-              onClick={() => handleClick(teacher.id)}
-              classTeacher={teacher.walletAddress}
-            /> : <></>
+            <TeacherCardUI
+              key={teacher.tutorId}
+              name={`${teacher.fname}`}
+              description={teacher.status}
+              avatar={teacher.avatar}
+              onClick={() => handleClick(teacher.tutorId)}
+            // classTeacher={teacher.walletAddress}
+            />
           ))}
         </div>
       </div>

@@ -120,15 +120,20 @@ const PaymentImage = styled.img`
 const token = getToken("token");
 
 const TeacherCard = ({
-  id,
-  name,
-  hours,
-  completionRate,
+  tutorID,
+  firstName,
+  lastName,
+  totalHoursHired,
+  percentSuccess,
   price,
-  rating,
+  averageRate,
+  teach,
   status,
-  ratingAmount,
-  followers,
+  contact,
+  videoUrl,
+  cusrating,
+  information
+
 }) => {
   const [isHireModalVisible, setIsHireModalVisible] = useState(false);
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
@@ -172,9 +177,10 @@ const TeacherCard = ({
         id: profileData.id,
       },
       tutor: {
-        id: id
+        id: tutorID
       }
     }
+    console.log("tutorID", tutorID)
     if (profileData.wallet.amount < hireCost) return setIsPaymentModalVisible(true);
     try {
       const response = await fetch(`${API_URL}/hire-tutors/hireTutor`, {
@@ -185,14 +191,17 @@ const TeacherCard = ({
         },
         body: JSON.stringify(values),
       });
+
       if (response && response.ok) {
         //handle success
       }
       window.location.reload();
     } catch (error) {
       console.error("Error:", error);
+
       return;
     }
+
   };
 
   const handleHireCancel = () => {
@@ -229,7 +238,7 @@ const TeacherCard = ({
       </div>
       <TeacherInfo>
         <TeacherName>
-          <p className="">{name}</p>
+          <p className="">{firstName}</p>
           <p className="mr-5">
             <UserAddOutlined />
           </p>
@@ -237,15 +246,15 @@ const TeacherCard = ({
         <Info>
           <InfoItem>
             <p className="text-lg font-bold my-2 text-gray-500">Already rented</p>
-            <p className="text-red-500">{hours} hours</p>
+            <p className="text-red-500">{totalHoursHired} totalHours</p>
           </InfoItem>
           <InfoItem>
             <p className="text-lg font-bold my-2 text-gray-500">Completion rate</p>
-            <p className="text-red-500">{completionRate}%</p>
+            <p className="text-red-500">{percentSuccess}%</p>
           </InfoItem>
           <InfoItem>
             <p className="text-lg font-bold my-2 text-gray-500">Followers</p>
-            <p className="text-red-500">{followers}</p>
+            <p className="text-red-500"></p>
           </InfoItem>
           <InfoItem>
             <p className="text-lg font-bold my-2 text-gray-500">Device status</p>
@@ -261,8 +270,8 @@ const TeacherCard = ({
       <div className="w-[300px]">
         <Price>{price} đ/h</Price>
         <div className="flex">
-          <Rate disabled defaultValue={rating} />
-          <p className="text-gray-400 ml-4">{ratingAmount} Ratings</p>
+          <Rate disabled defaultValue={cusrating} />
+          <p className="text-gray-400 ml-4">{averageRate} Ratings</p>
         </div>
         <ActionButtons>
           <HireButton onClick={showHireModal}>HIRE</HireButton>
@@ -290,7 +299,7 @@ const TeacherCard = ({
         ]}
       >
         <div>
-          <p>Tutor Name: {name}</p>
+          <p>Tutor Name: {firstName}</p>
           <div>
             <label>Time to Hire: </label>
             <Select
