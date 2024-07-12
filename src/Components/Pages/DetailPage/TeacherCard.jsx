@@ -132,7 +132,8 @@ const TeacherCard = ({
   contact,
   videoUrl,
   cusrating,
-  information
+  information,
+  followerCount
 
 }) => {
   const [isHireModalVisible, setIsHireModalVisible] = useState(false);
@@ -246,7 +247,7 @@ const TeacherCard = ({
         <Info>
           <InfoItem>
             <p className="text-lg font-bold my-2 text-gray-500">Already rented</p>
-            <p className="text-red-500">{totalHoursHired} totalHours</p>
+            <p className="text-red-500">{totalHoursHired} Hours</p>
           </InfoItem>
           <InfoItem>
             <p className="text-lg font-bold my-2 text-gray-500">Completion rate</p>
@@ -254,7 +255,7 @@ const TeacherCard = ({
           </InfoItem>
           <InfoItem>
             <p className="text-lg font-bold my-2 text-gray-500">Followers</p>
-            <p className="text-red-500"></p>
+            <p className="text-red-500">{followerCount}</p>
           </InfoItem>
           <InfoItem>
             <p className="text-lg font-bold my-2 text-gray-500">Device status</p>

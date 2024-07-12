@@ -50,10 +50,9 @@ const TeacherDetailPage = () => {
         totalHoursHired={`${tutor.totalHoursHired}`}
         percentSuccess={`${tutor.percentSuccess}`}
         price={tutor.price}
-        rating={tutor.averageRate}
-        // ratingAmount={tutor.cusrating.length}
+        averageRate={tutor.averageRate}
         status={`${tutor.status}`}
-      // teach={`${tutor.teach.subject}`}
+        followerCount={tutor.followerCount}
 
       />
 

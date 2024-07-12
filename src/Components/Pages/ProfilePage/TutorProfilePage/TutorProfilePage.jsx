@@ -8,6 +8,9 @@ import { API_URL } from '../../../../config';
 
 function TutorProfilePage() {
     const [tutorProfile, setTutorProfile] = useState(null)
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     useEffect(() => {
         (async () => {
             try {
@@ -33,6 +36,54 @@ function TutorProfilePage() {
             }
         })()
     }, []);
+
+
+    const updateTutorProfile = async (updatedData) => {
+        try {
+            const response = await fetch(`${API_URL}/app-users/update-certificate`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken("token")}`
+                },
+                body: JSON.stringify(updatedData)
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (err) {
+            console.error('Failed to update tutor profile:', err);
+            return null;
+        }
+    }
+
+    const handleChange = (e, type) => {
+        const { value } = e.target;
+        setTutorProfile({ ...tutorProfile, [type]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
+
+        try {
+            const updatedTutor = await updateTutorProfile(tutorProfile);
+            if (updatedTutor) {
+                setSuccess('Cập nhật hồ sơ thành công!');
+                alert('Cập nhật hồ sơ thành công!')
+            }
+        } catch (error) {
+            setError('Cập nhật hồ sơ thất bại');
+            alert('Cập nhật hồ sơ thất bại');
+        } finally {
+            setLoading(false);
+        }
+    };
     console.log("tutorProfile", tutorProfile)
     if (!tutorProfile) return <></>
     return (

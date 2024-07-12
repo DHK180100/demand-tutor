@@ -77,7 +77,7 @@ const WalletPage = () => {
       try {
         const token = getToken("token")
         console.log('token', token);
-        const response = await fetch(`${API_URL}/wallets/transactions`, {
+        const response = await fetch(`${API_URL}/wallets/Historytransactions`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
