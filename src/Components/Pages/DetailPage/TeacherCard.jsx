@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { Button, Rate, Modal, Select, Input, InputNumber } from "antd";
+import { Button, Rate, Modal, Select, Input } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import TeacherClasses from "./TeacherClasses";
 import { formatCurrency, getToken } from "../../../utils/common";
 import { API_URL } from "../../../config";
+import ChatBox from "../../Pages/DetailPage/ChatBox"; // Updated import path
 
 const CardContainer = styled.div`
   display: flex;
@@ -138,6 +139,7 @@ const TeacherCard = ({
 }) => {
   const [isHireModalVisible, setIsHireModalVisible] = useState(false);
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
+  const [isChatModalVisible, setIsChatModalVisible] = useState(false);
   const [hireDuration, setHireDuration] = useState(1);
   const [message, setMessage] = useState("");
   const [profileData, setProfileData] = useState(null)
@@ -223,6 +225,14 @@ const TeacherCard = ({
     console.log("Follow button clicked");
   };
 
+  const showChatModal = () => {
+    setIsChatModalVisible(true);
+  };
+
+  const handleChatClose = () => {
+    setIsChatModalVisible(false);
+  };
+
   return (
     <CardContainer>
       <div>
@@ -276,12 +286,7 @@ const TeacherCard = ({
         </div>
         <ActionButtons>
           <HireButton onClick={showHireModal}>HIRE</HireButton>
-          <Button
-            className="w-[90%] mt-6 text-xl font-semibold h-[40px]"
-            type="default"
-          >
-            CHAT
-          </Button>
+          <FollowButton onClick={showChatModal}>CHAT</FollowButton>
           <FollowButton onClick={handleFollow}>FOLLOW</FollowButton>
         </ActionButtons>
       </div>
@@ -349,6 +354,7 @@ const TeacherCard = ({
         </PaymentOption>
         {/* Add more payment options here if needed */}
       </Modal>
+      <ChatBox visible={isChatModalVisible} onClose={handleChatClose} />
     </CardContainer>
   );
 };
