@@ -5,15 +5,41 @@ import classroom_image from '../../../Assets/classroom.png';
 import teacher_image from '../../../Assets/teacher.png';
 
 const subjects = [
-    'Toán', 'Lý', 'Hóa', 'Sử', 'Văn', 'Địa', 'Anh', 'Khác'
+    { name: 'Toán', levels: [10, 11, 12] },
+    { name: 'Lý', levels: [10, 11, 12] },
+    { name: 'Hóa', levels: [10, 11, 12] },
+    { name: 'Sử', levels: [10, 11, 12] },
+    { name: 'Văn', levels: [10, 11, 12] },
+    { name: 'Địa', levels: [10, 11, 12] },
+    { name: 'Anh', levels: [10, 11, 12] }
 ];
 
 function ScheduleProfile() {
     const renderSubjectCheckboxes = () => {
-        return subjects.map((subject, index) => (
-            <div key={index} className="checkbox-item">
-                <input type="checkbox" id={`subject-${index}`} name={`subject-${index}`} />
-                <label htmlFor={`subject-${index}`}>{subject}</label>
+        return subjects.map((subject, subjectIndex) => (
+            <div key={subjectIndex} className="subject-group">
+                <h4>{subject.name}</h4>
+                {subject.levels.length > 0 ? (
+                    subject.levels.map((level, levelIndex) => (
+                        <div key={levelIndex} className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                id={`subject-${subjectIndex}-level-${level}`}
+                                name={`subject-${subjectIndex}-level-${level}`}
+                            />
+                            <label htmlFor={`subject-${subjectIndex}-level-${level}`}>{`${subject.name} ${level}`}</label>
+                        </div>
+                    ))
+                ) : (
+                    <div className="checkbox-item">
+                        <input
+                            type="checkbox"
+                            id={`subject-${subjectIndex}`}
+                            name={`subject-${subjectIndex}`}
+                        />
+                        <label htmlFor={`subject-${subjectIndex}`}>{subject.name}</label>
+                    </div>
+                )}
             </div>
         ));
     };
