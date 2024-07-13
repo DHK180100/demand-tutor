@@ -9,19 +9,20 @@ function TutorProfilePage() {
         <div className="tutor-profile-container">
             <ProfileSideBar />
             <div className="tutor-profile-content">
-                <div className="tutor-fixed-row">
-                    <div className="tutor-image-container">
-                        <img src={classroom_image} alt="Classroom" className="classroom-profile-image" />
+                <div className="fixed-row">
+                    <div className="image-container">
+                        <img src={classroom_image} alt="Classroom" className="profile-image" />
                     </div>
                 </div>
-                <div className="tutor-row">
+                <div className="row">
                     <div className="tutor-profile">
                         <img src={teacher_image} alt="Classroom" className="tutor-profile-image rounded-image" />
                     </div>
-                    <div className='tutor-profile-details'>
+                    <div className='profile-details'>
                         <h3>Alexa Rowles</h3>
                         <p>Email: alexa.rowles@example.com</p>
                     </div>
+                    <button className="edit-button">Edit</button>
                 </div>
                 <div className='tutor-profile-input-row'>
                     <div className='tutor-profile-input-bars'>
@@ -30,10 +31,10 @@ function TutorProfilePage() {
                             <br />
                             <input type='text' placeholder='University Graduate' />
                         </div>
-                        <div className='tutor-profile-class-input-bar'>
-                            <label>Class</label>
+                        <div className='tutor-profile-major-input-bar'>
+                            <label>Major</label>
                             <br />
-                            <input type='text' placeholder='Class' />
+                            <input type='text' placeholder='Major' />
                         </div>
                     </div>
                 </div>
@@ -48,20 +49,6 @@ function TutorProfilePage() {
                             <label>Graduation Year</label>
                             <br />
                             <input type='text' placeholder='Graduation Year' />
-                        </div>
-                    </div>
-                </div>
-                <div className='tutor-profile-input-row'>
-                    <div className='tutor-profile-input-bars'>
-                        <div className='tutor-profile-major-input-bar'>
-                            <label>Major</label>
-                            <br />
-                            <input type='text' placeholder='Major' />
-                        </div>
-                        <div className='tutor-profile-academic-rank-input-bar'>
-                            <label>Academic Rank</label>
-                            <br />
-                            <input type='text' placeholder='Academic Rank' />
                         </div>
                     </div>
                 </div>
