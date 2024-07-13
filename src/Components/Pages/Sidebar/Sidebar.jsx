@@ -1,6 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Sidebar.css";
-
 import signal_png from "../../Assets/signal.png";
 
 function Sidebar() {
@@ -9,36 +9,52 @@ function Sidebar() {
       <h3>Subject</h3>
       <ul>
         <li>
-          <img src={signal_png} />
-          Toán
+          <Link to="/ToanTeacher">
+            <img src={signal_png} alt="Signal" />
+            Toán
+          </Link>
         </li>
         <li>
-          <img src={signal_png} />
-          Lý
+          <Link to="/LyTeacher">
+            <img src={signal_png} alt="Signal" />
+            Lý
+          </Link>
         </li>
         <li>
-          <img src={signal_png} />
-          Hóa
+          <Link to="/HoaTeacher">
+            <img src={signal_png} alt="Signal" />
+            Hóa
+          </Link>
         </li>
         <li>
-          <img src={signal_png} />
-          Sử
+          <Link to="/SuTeacher">
+            <img src={signal_png} alt="Signal" />
+            Sử
+          </Link>
         </li>
         <li>
-          <img src={signal_png} />
-          Văn
+          <Link to="/VanTeacher">
+            <img src={signal_png} alt="Signal" />
+            Văn
+          </Link>
         </li>
         <li>
-          <img src={signal_png} />
-          Địa
+          <Link to="/DiaTeacher">
+            <img src={signal_png} alt="Signal" />
+            Địa
+          </Link>
         </li>
         <li>
-          <img src={signal_png} />
-          Anh
+          <Link to="/AnhTeacher">
+            <img src={signal_png} alt="Signal" />
+            Anh
+          </Link>
         </li>
         <li>
-          <img src={signal_png} />
-          Other
+          <Link to="/OtherTeacher">
+            <img src={signal_png} alt="Signal" />
+            Other
+          </Link>
         </li>
       </ul>
     </div>
