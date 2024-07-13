@@ -18,9 +18,14 @@ const platforms = ['Zalo', 'Zoom', 'Google Meet', 'Microsoft Teams'];
 
 function ScheduleProfile() {
     const [selectedPlatform, setSelectedPlatform] = useState('');
+    const [rentalCost, setRentalCost] = useState(300000); // default value in VND
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
+    };
+
+    const handleRentalCostChange = (event) => {
+        setRentalCost(event.target.value);
     };
 
     const renderSubjectCheckboxes = () => {
@@ -89,8 +94,14 @@ function ScheduleProfile() {
                     </div>
                     <div className="additional-info-container">
                         <div className="info-row">
-                            <label>Rental Cost</label>
-                            <button className="info-button">30.0</button>
+                            <label>Rental Cost (VND)</label>
+                            <input
+                                type="number"
+                                className="info-button"
+                                value={rentalCost}
+                                onChange={handleRentalCostChange}
+                                min="0"
+                            />
                         </div>
                         <div className="info-row">
                             <label>Choose Platform</label>

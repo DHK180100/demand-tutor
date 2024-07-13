@@ -1,120 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ProfileSideBar from '../ProfileSideBar/ProfileSideBar';
 import './TutorProfilePage.css';
 import classroom_image from '../../../Assets/classroom.png';
 import teacher_image from '../../../Assets/teacher.png';
-import { getToken } from '../../../../utils/common';
-import { API_URL } from '../../../../config';
 
 function TutorProfilePage() {
-    const [tutorProfile, setTutorProfile] = useState(null)
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
-    useEffect(() => {
-        (async () => {
-            try {
-                const token = getToken("token")
-                console.log('token', token)
-                const response = await fetch(`${API_URL}/app-users/getAllCertifycate`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setTutorProfile(data);
-
-
-            } catch (err) {
-                setTutorProfile(null);
-            }
-        })()
-    }, []);
-
-
-    const updateTutorProfile = async (updatedData) => {
-        try {
-            const response = await fetch(`${API_URL}/app-users/update-certificate`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken("token")}`
-                },
-                body: JSON.stringify(updatedData)
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (err) {
-            console.error('Failed to update tutor profile:', err);
-            return null;
-        }
-    }
-
-    const handleChange = (e, type) => {
-        const { value } = e.target;
-        setTutorProfile({ ...tutorProfile, [type]: value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        setSuccess(null);
-
-        try {
-            const updatedTutor = await updateTutorProfile(tutorProfile);
-            if (updatedTutor) {
-                setSuccess('Cập nhật hồ sơ thành công!');
-                alert('Cập nhật hồ sơ thành công!')
-            }
-        } catch (error) {
-            setError('Cập nhật hồ sơ thất bại');
-            alert('Cập nhật hồ sơ thất bại');
-        } finally {
-            setLoading(false);
-        }
-    };
-    console.log("tutorProfile", tutorProfile)
-    if (!tutorProfile) return <></>
     return (
         <div className="tutor-profile-container">
             <ProfileSideBar />
             <div className="tutor-profile-content">
-                <div className="tutor-fixed-row">
-                    <div className="tutor-image-container">
-                        <img src={classroom_image} alt="Classroom" className="classroom-profile-image" />
+                <div className="fixed-row">
+                    <div className="image-container">
+                        <img src={classroom_image} alt="Classroom" className="profile-image" />
                     </div>
                 </div>
-                <div className="tutor-row">
+                <div className="row">
                     <div className="tutor-profile">
                         <img src={teacher_image} alt="Classroom" className="tutor-profile-image rounded-image" />
                     </div>
-                    <div className='tutor-profile-details'>
-                        <h3>{tutorProfile.fname}&nbsp;{tutorProfile.lname}</h3>
-                        <p>{tutorProfile.email}</p>
+                    <div className='profile-details'>
+                        <h3>Alexa Rowles</h3>
+                        <p>Email: alexa.rowles@example.com</p>
                     </div>
+                    <button className="edit-button">Edit</button>
                 </div>
                 <div className='tutor-profile-input-row'>
                     <div className='tutor-profile-input-bars'>
                         <div className='tutor-profile-university-graduate-input-bar'>
                             <label>University Graduate</label>
                             <br />
-                            <input type='text' placeholder='University Graduate' value={tutorProfile.school} />
+                            <input type='text' placeholder='University Graduate' />
                         </div>
-                        <div className='tutor-profile-class-input-bar'>
-                            <label>Class</label>
+                        <div className='tutor-profile-major-input-bar'>
+                            <label>Major</label>
                             <br />
-                            <input type='text' placeholder='Class' />
+                            <input type='text' placeholder='Major' />
                         </div>
                     </div>
                 </div>
@@ -123,26 +43,12 @@ function TutorProfilePage() {
                         <div className='tutor-profile-student-id-input-bar'>
                             <label>Student ID</label>
                             <br />
-                            <input type='text' placeholder='Student ID' value={tutorProfile.studentID} />
+                            <input type='text' placeholder='Student ID' />
                         </div>
                         <div className='tutor-profile-graduation-year-input-bar'>
                             <label>Graduation Year</label>
                             <br />
-                            <input type='text' placeholder='Graduation Year' value={tutorProfile.year} />
-                        </div>
-                    </div>
-                </div>
-                <div className='tutor-profile-input-row'>
-                    <div className='tutor-profile-input-bars'>
-                        <div className='tutor-profile-major-input-bar'>
-                            <label>Major</label>
-                            <br />
-                            <input type='text' placeholder='Major' value={tutorProfile.major} />
-                        </div>
-                        <div className='tutor-profile-academic-rank-input-bar'>
-                            <label>Academic Rank</label>
-                            <br />
-                            <input type='text' placeholder='Academic Rank' />
+                            <input type='text' placeholder='Graduation Year' />
                         </div>
                     </div>
                 </div>
