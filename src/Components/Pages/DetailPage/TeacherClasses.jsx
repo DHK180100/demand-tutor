@@ -4,7 +4,6 @@ import "tailwindcss/tailwind.css";
 
 
 const TeacherClasses = ({ teach }) => {
-  console.log("teach", teach)
   return (
     <div className="flex justify-center my-4">
       {teach && teach.length > 0 && teach.map((className, index) => (

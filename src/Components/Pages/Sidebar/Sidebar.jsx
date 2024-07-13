@@ -11,49 +11,25 @@ function Sidebar() {
         <li>
           <Link to="/ToanTeacher">
             <img src={signal_png} alt="Signal" />
-            Toán
+            Math
           </Link>
         </li>
         <li>
           <Link to="/LyTeacher">
             <img src={signal_png} alt="Signal" />
-            Lý
+            Physic
           </Link>
         </li>
         <li>
           <Link to="/HoaTeacher">
             <img src={signal_png} alt="Signal" />
-            Hóa
-          </Link>
-        </li>
-        <li>
-          <Link to="/SuTeacher">
-            <img src={signal_png} alt="Signal" />
-            Sử
-          </Link>
-        </li>
-        <li>
-          <Link to="/VanTeacher">
-            <img src={signal_png} alt="Signal" />
-            Văn
-          </Link>
-        </li>
-        <li>
-          <Link to="/DiaTeacher">
-            <img src={signal_png} alt="Signal" />
-            Địa
+            Chemistry
           </Link>
         </li>
         <li>
           <Link to="/AnhTeacher">
             <img src={signal_png} alt="Signal" />
-            Anh
-          </Link>
-        </li>
-        <li>
-          <Link to="/OtherTeacher">
-            <img src={signal_png} alt="Signal" />
-            Other
+            English
           </Link>
         </li>
       </ul>

@@ -123,8 +123,8 @@ function MainPage() {
           {teacherData && teacherData.map((teacher) => (
             <TeacherCardUI
               key={teacher.tutorId}
-              name={`${teacher.fname}`}
-              description={teacher.status}
+              alt={`${teacher.fname}`}
+              status={teacher.status}
               avatar={teacher.avatar}
               onClick={() => handleClick(teacher.tutorId)}
             // classTeacher={teacher.walletAddress}
