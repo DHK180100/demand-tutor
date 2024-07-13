@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./style/TeacherDetailPage.css";
 import TeacherCard from "./TeacherCard";
-import TeacherClasses from "./TeacherClasses";
 import TeacherInfo from "./TeacherInfo";
 import BreadcrumbWithBackButton from "../../UI/BreadCrumb/BreadCrumb";
 import TeacherVideo from "./TeacherVideo";
@@ -51,9 +50,10 @@ const TeacherDetailPage = () => {
         percentSuccess={`${tutor.percentSuccess}`}
         price={tutor.price}
         averageRate={tutor.averageRate}
+        cusrating={tutor.averageRate}
         status={`${tutor.status}`}
         followerCount={tutor.followerCount}
-
+        teach={tutor.teach}
       />
 
       <TeacherInfo information={tutor.information} />

@@ -100,8 +100,8 @@ function TutorProfilePage() {
                         <img src={teacher_image} alt="Classroom" className="tutor-profile-image rounded-image" />
                     </div>
                     <div className='tutor-profile-details'>
-                        <h3>Alexa Rowles</h3>
-                        <p>Email: alexa.rowles@example.com</p>
+                        <h3>{tutorProfile.fname}&nbsp;{tutorProfile.lname}</h3>
+                        <p>{tutorProfile.email}</p>
                     </div>
                 </div>
                 <div className='tutor-profile-input-row'>

@@ -134,7 +134,7 @@ const TeacherCard = ({
   videoUrl,
   cusrating,
   information,
-  followerCount
+  followerCount,
 
 }) => {
   const [isHireModalVisible, setIsHireModalVisible] = useState(false);
@@ -144,7 +144,6 @@ const TeacherCard = ({
   const [message, setMessage] = useState("");
   const [profileData, setProfileData] = useState(null)
 
-  console.log("profileData", profileData)
   useEffect(() => {
     (async () => {
       const response = await fetch(`${API_URL}/app-users/GetCurrentAppUser`, {
@@ -232,7 +231,6 @@ const TeacherCard = ({
   const handleChatClose = () => {
     setIsChatModalVisible(false);
   };
-
   return (
     <CardContainer>
       <div>
@@ -275,7 +273,9 @@ const TeacherCard = ({
           </InfoItem>
         </Info>
         <div className="mt-6 w-full max-w-[800px] border rounded-md ">
-          <TeacherClasses />
+          <TeacherClasses
+            teach={teach}
+          />
         </div>
       </TeacherInfo>
       <div className="w-[300px]">
