@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './../TutorProfilePage/TutorProfilePage.css';
 import ProfileSideBar from '../ProfileSideBar/ProfileSideBar';
 import classroom_image from '../../../Assets/classroom.png';
@@ -14,7 +14,15 @@ const subjects = [
     { name: 'Anh', levels: [10, 11, 12] }
 ];
 
+const platforms = ['Zalo', 'Zoom', 'Google Meet', 'Microsoft Teams'];
+
 function ScheduleProfile() {
+    const [selectedPlatform, setSelectedPlatform] = useState('');
+
+    const handlePlatformChange = (event) => {
+        setSelectedPlatform(event.target.value);
+    };
+
     const renderSubjectCheckboxes = () => {
         return subjects.map((subject, subjectIndex) => (
             <div key={subjectIndex} className="subject-group">
@@ -86,10 +94,16 @@ function ScheduleProfile() {
                         </div>
                         <div className="info-row">
                             <label>Choose Platform</label>
-                            <button className="info-button">Choose</button>
+                            <select className="info-button" value={selectedPlatform} onChange={handlePlatformChange}>
+                                <option value="" disabled>Select Platform</option>
+                                {platforms.map((platform, index) => (
+                                    <option key={index} value={platform}>{platform}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="info-row">
                             <label className="bold-label">Platform</label>
+                            <p>{selectedPlatform}</p>
                         </div>
                     </div>
                     <div className="save-button-container">
