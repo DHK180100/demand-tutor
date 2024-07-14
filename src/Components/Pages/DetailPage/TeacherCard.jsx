@@ -239,9 +239,8 @@ const TeacherCard = ({
           alt='Teacher'
         />
         <p
-          className={`font-semibold text-center my-2 ${
-            status === 'BUSY' ? 'text-red-500' : 'text-green-500'
-          }`}
+          className={`font-semibold text-center my-2 ${status === 'BUSY' ? 'text-red-500' : 'text-green-500'
+            }`}
         >
           {status}
         </p>
@@ -280,7 +279,7 @@ const TeacherCard = ({
           </InfoItem>
         </Info>
         <div className='mt-6 w-full max-w-[800px] border rounded-md '>
-          <TeacherClasses />
+          <TeacherClasses teach={teach} />
         </div>
       </TeacherInfo>
       <div className='w-[300px]'>

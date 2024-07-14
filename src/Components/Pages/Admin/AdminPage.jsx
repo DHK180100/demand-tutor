@@ -1,11 +1,12 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
-import { DollarOutlined, UserOutlined, FileSearchOutlined, CheckOutlined, TeamOutlined } from '@ant-design/icons';
+import { DollarOutlined, UserOutlined, FileSearchOutlined, CheckOutlined, TeamOutlined, MoneyCollectOutlined } from '@ant-design/icons';
 import TotalIncome from './TotalIncome';
 import ManageUsers from './ManageUsers';
 import ViewReports from './ViewReports';
 import CheckTutors from './CheckTutors';
 import ApproveUsers from './ApproveUsers';
+import ViewWithdrawalReports from './ViewWithdrawalReports';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -35,6 +36,8 @@ class AdminPage extends React.Component {
         return <CheckTutors />;
       case '5':
         return <ApproveUsers />;
+      case '6':
+        return <ViewWithdrawalReports />;
       default:
         return <TotalIncome />;
     }
@@ -60,6 +63,9 @@ class AdminPage extends React.Component {
             </Menu.Item>
             <Menu.Item key="5" icon={<TeamOutlined />}>
               Approve Users
+            </Menu.Item>
+            <Menu.Item key="6" icon={<MoneyCollectOutlined />}>
+              View Withdrawal Reports
             </Menu.Item>
           </Menu>
         </Sider>

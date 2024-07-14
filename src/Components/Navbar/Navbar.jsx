@@ -74,19 +74,7 @@ const WalletBalance = styled.div`
   border-radius: 8px;
 `;
 
-const notifications = (
-  <Menu>
-    <Menu.Item key='1'>
-      <Link to='/notification1'>Notification 1</Link>
-    </Menu.Item>
-    <Menu.Item key='2'>
-      <Link to='/notification2'>Notification 2</Link>
-    </Menu.Item>
-    <Menu.Item key='3'>
-      <Link to='/notification3'>Notification 3</Link>
-    </Menu.Item>
-  </Menu>
-);
+
 
 function Navbar() {
   const auth = useAuthContext();
@@ -144,15 +132,6 @@ function Navbar() {
       <NavMenu>
         {token && profileData && profileData.wallet && (
           <>
-            <Dropdown
-              overlay={notifications}
-              placement='bottomRight'
-              trigger={['click']}
-            >
-              <Badge count={5}>
-                <BellOutlined style={{ fontSize: '24px' }} />
-              </Badge>
-            </Dropdown>
             <Link to='/wallet'>
               <WalletBalance>
                 <WalletOutlined />
@@ -211,9 +190,6 @@ function Navbar() {
             </Link>
           </>
         )}
-        <Link to='/wallet'>
-          <NavButton icon={<BiSolidWallet />} />
-        </Link>
       </NavMenu>
     </NavbarContainer>
   );
