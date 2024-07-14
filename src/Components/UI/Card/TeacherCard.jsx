@@ -5,13 +5,12 @@ import { Card, Avatar } from "antd";
 
 const { Meta } = Card;
 
-const TeacherCardUI = ({ avatar, fname, description, onClick }) => {
+const TeacherCardUI = ({ avatar, fname, lname, status, onClick }) => {
   return (
     <StyledCard onClick={onClick}>
-      <img src={avatar} alt={fname} className="teacher-image" />
-      <h5 className="teacher-name">{fname}</h5>
-      {/* <p className="text-xs font-semibold">{classTeacher}</p> */}
-      <p className="teacher-description">{description}</p>
+      <img src={avatar} alt={`${fname} ${lname}`} className="teacher-image" />
+      <h5 className="teacher-name">{`${fname} ${lname}`}</h5>
+      <p className="teacher-description" style={{ color: status === 'READY' ? 'green' : 'red' }}>{status}</p>
     </StyledCard>
   );
 };

@@ -6,10 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthContextProvider } from './Components/Contexts/AuthContext';
 import WebSocketProvider from './Components/Contexts/SockContext';
-
+import ErrorBoundary from 'antd/es/alert/ErrorBoundary';
 const root = ReactDOM.createRoot(document.getElementById('root'));
+console.error = () => { };
 root.render(
-  <React.StrictMode>
+
+  <ErrorBoundary>
     <BrowserRouter>
       <WebSocketProvider>
         <AuthContextProvider>
@@ -17,7 +19,8 @@ root.render(
         </AuthContextProvider>
       </WebSocketProvider>
     </BrowserRouter>
-  </React.StrictMode >
+  </ErrorBoundary>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

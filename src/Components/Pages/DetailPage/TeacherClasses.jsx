@@ -5,9 +5,8 @@ import "tailwindcss/tailwind.css";
 const TeacherClasses = ({ teach }) => {
   return (
     <div className="flex justify-center my-4">
-      {teach && teach.length && teach.map((className, index) => (
+      {teach && teach.length > 0 && teach.map((className, index) => (
         <Button key={index} className="mx-1">
-          {className}
           {className.subject}
         </Button>
       ))}

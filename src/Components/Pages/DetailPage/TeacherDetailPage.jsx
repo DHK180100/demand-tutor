@@ -49,10 +49,11 @@ const TeacherDetailPage = () => {
         percentSuccess={`${tutor.percentSuccess}`}
         price={tutor.price}
         averageRate={tutor.averageRate}
+        cusrating={tutor.averageRate}
         status={`${tutor.status}`}
-        followerCount={tutor.followerCount}
         login={tutor.userName}
         teach={tutor.teach}
+        numberFollow={tutor.numberFollow}
       />
 
       <TeacherInfo information={tutor.information} />

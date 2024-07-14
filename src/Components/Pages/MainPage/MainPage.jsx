@@ -123,11 +123,11 @@ function MainPage() {
           {teacherData && teacherData.map((teacher) => (
             <TeacherCardUI
               key={teacher.tutorId}
-              name={`${teacher.fname}`}
-              description={teacher.status}
+              fname={teacher.fname}
+              lname={teacher.lname}
+              status={teacher.status}
               avatar={teacher.avatar}
               onClick={() => handleClick(teacher.tutorId)}
-            // classTeacher={teacher.walletAddress}
             />
           ))}
         </div>

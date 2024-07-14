@@ -99,7 +99,7 @@ const WalletPage = () => {
   };
 
 
-
+  if (!transactions) return <></>
 
   return (
     <WalletContainer>
@@ -172,7 +172,7 @@ const WalletPage = () => {
             <tbody>
               {transactions.depositTrans.map((item, index) => (
                 <tr key={index}>
-                  <TableData>{item.date}</TableData>
+                  <TableData>{item.createAt}</TableData>
                   <TableData>{item.amount.toLocaleString()} đ</TableData>
                 </tr>
               ))}

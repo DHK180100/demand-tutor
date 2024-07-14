@@ -124,6 +124,7 @@ const TeacherCard = ({
   tutorID,
   firstName,
   lastName,
+  userName,
   totalHoursHired,
   percentSuccess,
   price,
@@ -134,8 +135,10 @@ const TeacherCard = ({
   videoUrl,
   cusrating,
   information,
-  followerCount,
   login,
+  numberFollow,
+  email,
+  img
 }) => {
   const [isHireModalVisible, setIsHireModalVisible] = useState(false);
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
@@ -267,7 +270,7 @@ const TeacherCard = ({
           </InfoItem>
           <InfoItem>
             <p className='text-lg font-bold my-2 text-gray-500'>Followers</p>
-            <p className='text-red-500'>{followerCount}</p>
+            <p className='text-red-500'>{numberFollow}</p>
           </InfoItem>
           <InfoItem>
             <p className='text-lg font-bold my-2 text-gray-500'>
