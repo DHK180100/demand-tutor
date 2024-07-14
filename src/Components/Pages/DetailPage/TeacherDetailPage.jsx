@@ -52,6 +52,7 @@ const TeacherDetailPage = () => {
         status={`${tutor.status}`}
         followerCount={tutor.followerCount}
         login={tutor.userName}
+        teach={tutor.teach}
       />
 
       <TeacherInfo information={tutor.information} />

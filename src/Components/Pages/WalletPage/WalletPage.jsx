@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Tabs } from 'antd';
+import { Tabs, Button, Modal, Form, Input, Select, Spin } from 'antd';
 import { API_URL } from '../../../config';
 import { getToken } from "../../../utils/common";
 
 const { TabPane } = Tabs;
+const { Option } = Select;
+
 
 const WalletContainer = styled.div`
   width: 80%;
@@ -52,25 +54,10 @@ const TableData = styled.td`
 `;
 
 const WalletPage = () => {
-  const [currentMoney, setCurrentMoney] = useState(0);
-  const [rentalHistory, setRentalHistory] = useState([]);
-  const [depositHistory, setDepositHistory] = useState([]);
-
-  useEffect(() => {
-    // Replace with actual data fetching
-    setCurrentMoney(50000);
-    setRentalHistory([
-      { date: '2024-06-01', amount: 10000 },
-      { date: '2024-05-25', amount: 15000 },
-    ]);
-    setDepositHistory([
-      { date: '2024-06-02', amount: 20000 },
-      { date: '2024-05-20', amount: 25000 },
-    ]);
-  }, []);
-
 
   const [transactions, setTransactions] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -96,16 +83,64 @@ const WalletPage = () => {
       }
     })()
   }, []);
-  console.log("transactions", transactions)
-  if (!transactions) return <></>
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleFinish = (values) => {
+    console.log('Received values of form: ', values);
+    // Add your submit logic here
+    setIsModalVisible(false);
+  };
+
+
+
 
   return (
     <WalletContainer>
+      <Button type="primary" onClick={showModal}>
+        Withdrawal
+      </Button>
+      <Modal title="Rút tiền" visible={isModalVisible} onCancel={handleCancel} footer={null}>
+        <Form layout="vertical" onFinish={handleFinish}>
+          <Form.Item label="Số tiền rút" name="withdrawAmount" rules={[{ required: true, message: 'Please input the amount to withdraw!' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Kênh thanh toán" name="paymentChannel" rules={[{ required: true, message: 'Please select the payment channel!' }]}>
+            <Select>
+              <Option value="bank">Tài khoản ngân hàng</Option>
+              {/* Add other options as needed */}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Tài khoản ngân hàng" name="bankAccount" rules={[{ required: true, message: 'Please select the bank account!' }]}>
+            <Select>
+              <Option value="select">Select...</Option>
+              {/* Add bank account options here */}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Tổng tiền nhận" name="totalAmount">
+            <Input readOnly />
+          </Form.Item>
+          <Form.Item>
+            <Button type="default" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>
+              Send
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
       <Tabs defaultActiveKey="1">
         <TabPane tab="Current Money" key="1">
           <MoneyContainer>
             <span>Available Balance:</span>
-            <MoneyAmount>{currentMoney.toLocaleString()} đ</MoneyAmount>
+            <MoneyAmount>{transactions.amount.toLocaleString()} đ</MoneyAmount>
           </MoneyContainer>
         </TabPane>
         <TabPane tab="Rental History" key="2">
@@ -117,9 +152,9 @@ const WalletPage = () => {
               </tr>
             </thead>
             <tbody>
-              {rentalHistory.map((item, index) => (
+              {transactions.hireTrans.map((item, index) => (
                 <tr key={index}>
-                  <TableData>{item.date}</TableData>
+                  <TableData>{item.createAt}</TableData>
                   <TableData>{item.amount.toLocaleString()} đ</TableData>
                 </tr>
               ))}
@@ -135,7 +170,7 @@ const WalletPage = () => {
               </tr>
             </thead>
             <tbody>
-              {depositHistory.map((item, index) => (
+              {transactions.depositTrans.map((item, index) => (
                 <tr key={index}>
                   <TableData>{item.date}</TableData>
                   <TableData>{item.amount.toLocaleString()} đ</TableData>
