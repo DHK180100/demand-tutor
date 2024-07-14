@@ -38,7 +38,7 @@ function TutorProfilePage() {
     }, []);
 
 
-    const updateTutorProfile = async (updatedTutor) => {
+    const updateTutorProfile = async (updatedData) => {
         try {
             const response = await fetch(`${API_URL}/app-users/update-certificate`, {
                 method: 'PUT',
@@ -46,7 +46,7 @@ function TutorProfilePage() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${getToken("token")}`
                 },
-                body: JSON.stringify(updatedTutor)
+                body: JSON.stringify(updatedData)
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -90,43 +90,31 @@ function TutorProfilePage() {
         <div className="tutor-profile-container">
             <ProfileSideBar />
             <div className="tutor-profile-content">
-                <div className="fixed-row">
-                    <div className="image-container">
-                        <img src={classroom_image} alt="Classroom" className="profile-image" />
+                <div className="tutor-fixed-row">
+                    <div className="tutor-image-container">
+                        <img src={classroom_image} alt="Classroom" className="classroom-profile-image" />
                     </div>
                 </div>
-                <div className="row">
+                <div className="tutor-row">
                     <div className="tutor-profile">
                         <img src={teacher_image} alt="Classroom" className="tutor-profile-image rounded-image" />
                     </div>
-                    <div className='profile-details'>
-                        <h3>{tutorProfile.fname}</h3>
-                        <p>{tutorProfile.email}</p>
+                    <div className='tutor-profile-details'>
+                        <h3>Alexa Rowles</h3>
+                        <p>Email: alexa.rowles@example.com</p>
                     </div>
-                    <button
-                        onClick={(e) => handleSubmit(e)}
-                        className="edit-button">EDIT</button>
                 </div>
                 <div className='tutor-profile-input-row'>
                     <div className='tutor-profile-input-bars'>
                         <div className='tutor-profile-university-graduate-input-bar'>
                             <label>University Graduate</label>
                             <br />
-                            <input
-                                type='text'
-                                placeholder='University Graduate'
-                                value={tutorProfile.school}
-                                onChange={(e) => handleChange(e, 'school')}
-                            />
+                            <input type='text' placeholder='University Graduate' value={tutorProfile.school} />
                         </div>
-                        <div className='tutor-profile-major-input-bar'>
-                            <label>Major</label>
+                        <div className='tutor-profile-class-input-bar'>
+                            <label>Class</label>
                             <br />
-                            <input type='text'
-                                placeholder='Major'
-                                value={tutorProfile.major}
-                                onChange={(e) => handleChange(e, 'major')}
-                            />
+                            <input type='text' placeholder='Class' />
                         </div>
                     </div>
                 </div>
@@ -135,20 +123,26 @@ function TutorProfilePage() {
                         <div className='tutor-profile-student-id-input-bar'>
                             <label>Student ID</label>
                             <br />
-                            <input type='text'
-                                placeholder='Student ID'
-                                value={tutorProfile.studentID}
-                                onChange={(e) => handleChange(e, 'studentID')}
-                            />
+                            <input type='text' placeholder='Student ID' value={tutorProfile.studentID} />
                         </div>
                         <div className='tutor-profile-graduation-year-input-bar'>
                             <label>Graduation Year</label>
                             <br />
-                            <input type='text'
-                                placeholder='Graduation Year'
-                                value={tutorProfile.year}
-                                onChange={(e) => handleChange(e, 'year')}
-                            />
+                            <input type='text' placeholder='Graduation Year' value={tutorProfile.year} />
+                        </div>
+                    </div>
+                </div>
+                <div className='tutor-profile-input-row'>
+                    <div className='tutor-profile-input-bars'>
+                        <div className='tutor-profile-major-input-bar'>
+                            <label>Major</label>
+                            <br />
+                            <input type='text' placeholder='Major' value={tutorProfile.major} />
+                        </div>
+                        <div className='tutor-profile-academic-rank-input-bar'>
+                            <label>Academic Rank</label>
+                            <br />
+                            <input type='text' placeholder='Academic Rank' />
                         </div>
                     </div>
                 </div>
@@ -168,6 +162,9 @@ function TutorProfilePage() {
                         <br />
                         <button>+Add Image</button>
                     </div>
+                </div>
+                <div className="send-button-container">
+                    <button className='send-button'>Send</button>
                 </div>
             </div>
         </div>

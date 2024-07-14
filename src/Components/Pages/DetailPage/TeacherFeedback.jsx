@@ -18,7 +18,7 @@ const feedbackData = [
 ];
 
 const TeacherFeedback = ({ ratings }) => {
-  // console.log("ratings", ratings)
+  console.log("ratings", ratings)
   return (
     <div className="mt-8 w-full max-w-[1100px]">
       <h2 className="text-2xl font-semibold my-8">Feedback</h2>

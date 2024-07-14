@@ -4,14 +4,20 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthContextProvider } from './Components/Contexts/AuthContext';
+import WebSocketProvider from './Components/Contexts/SockContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <WebSocketProvider>
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
+      </WebSocketProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode >
 );
 
 // If you want to start measuring performance in your app, pass a function

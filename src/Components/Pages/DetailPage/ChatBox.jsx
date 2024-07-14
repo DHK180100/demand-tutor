@@ -1,6 +1,10 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Button, Input, Modal } from "antd";
+import { Button, Input, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
+import { removeDupplicate } from '../../../utils';
+import { useAuthContext } from '../../Contexts/AuthContext';
+import { useWebSocket } from '../../Contexts/SockContext';
 
 const ChatContainer = styled.div`
   display: flex;
@@ -43,30 +47,92 @@ const SendButton = styled(Button)`
   flex-shrink: 0;
 `;
 
-const ChatBox = ({ visible, onClose }) => {
-  const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState("");
+const ChatBox = ({ visible, onClose, receiver }) => {
+  const socket = useWebSocket();
+  const auth = useAuthContext();
+  const [messageList, setMessageList] = useState([]);
+  const [message, setMessage] = useState('');
+  const [insideVisible, setInsideVisible] = useState(false);
+
+  useEffect(() => {
+    // Kết nối WebSocket khi component được mount
+    socket?.connect?.(onMessageReceived);
+
+    // Ngắt kết nối WebSocket khi component bị unmount
+    return () => {
+      socket?.disconnect?.();
+    };
+  }, []);
+
+  const onMessageReceived = (res) => {
+    const result = JSON.parse(res.body);
+
+    setMessage('');
+
+    if (auth?.user?.login === result?.receiver && !insideVisible) {
+      setInsideVisible(true);
+    }
+
+    setMessageList((prev) => {
+      return [...prev, result];
+    });
+  };
+
+  const handleSendMessage = (payload) => {
+    socket?.sendMessage?.(payload);
+  };
 
   const handleSend = () => {
-    if (message.trim()) {
-      setMessages([...messages, message]);
-      setMessage("");
-    }
+    const payload = {
+      sender: auth?.user?.login,
+      receiver: receiver,
+      content: message.trim(),
+      messageId: uuidv4(),
+    };
+
+    handleSendMessage(payload);
   };
+
+  const handleClose = () => {
+    onClose?.();
+    setInsideVisible(false);
+  };
+
+  const removeDupplicateList = removeDupplicate(messageList);
 
   return (
     <Modal
-      title="Chat"
-      visible={visible}
-      onCancel={onClose}
+      title='Chat'
+      visible={visible || insideVisible}
+      onCancel={handleClose}
       footer={null}
       width={400}
     >
       <ChatContainer>
         <ChatHeader>Chat with Tutor</ChatHeader>
         <ChatMessages>
-          {messages.map((msg, index) => (
-            <div key={index}>{msg}</div>
+          {removeDupplicateList.map((msg, index) => (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent:
+                  msg?.sender === auth?.user?.login ? 'flex-end' : 'unset',
+                marginBottom: '4px',
+              }}
+              key={index}
+            >
+              <span
+                style={{
+                  background:
+                    msg?.sender !== auth?.user?.login ? '#303030' : '#0084FF',
+                  padding: '5px',
+                  borderRadius: '5px',
+                  color: '#fff',
+                }}
+              >
+                {msg.content}
+              </span>
+            </div>
           ))}
         </ChatMessages>
         <ChatInputContainer>
@@ -74,9 +140,14 @@ const ChatBox = ({ visible, onClose }) => {
             rows={1}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type a message..."
+            placeholder='Type a message...'
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSend();
+              }
+            }}
           />
-          <SendButton type="primary" onClick={handleSend}>
+          <SendButton type='primary' onClick={handleSend}>
             Send
           </SendButton>
         </ChatInputContainer>
