@@ -6,7 +6,7 @@ import signal_png from "../../Assets/signal.png";
 function Sidebar() {
   return (
     <div className="Sidebar">
-      <h3>Subject</h3>
+      <h3>Subjects</h3>
       <ul>
         <li>
           <Link to="/ToanTeacher">
@@ -17,7 +17,7 @@ function Sidebar() {
         <li>
           <Link to="/LyTeacher">
             <img src={signal_png} alt="Signal" />
-            Physic
+            Physics
           </Link>
         </li>
         <li>
