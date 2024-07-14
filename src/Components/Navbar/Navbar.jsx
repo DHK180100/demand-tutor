@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Menu, Dropdown, Button, Avatar, Badge } from "antd";
+import React, { useEffect, useState } from 'react';
+import { Menu, Dropdown, Button, Avatar, Badge } from 'antd';
 import {
   UserOutlined,
   SettingOutlined,
@@ -8,20 +8,23 @@ import {
   ProfileOutlined,
   ScheduleOutlined,
   BellOutlined,
-} from "@ant-design/icons";
-import logo from "../Assets/logo.png";
-import styled from "styled-components";
+} from '@ant-design/icons';
+import { BiSolidWallet } from 'react-icons/bi';
+import logo from '../Assets/logo.png';
+import styled from 'styled-components';
 
-import "./Navbar.css";
-import { Link } from "react-router-dom";
-import { API_URL } from "../../config";
+import './Navbar.css';
+import { Link } from 'react-router-dom';
+import { API_URL } from '../../config';
+import { useAuthContext } from '../Contexts/AuthContext';
+import { convertLegacyProps } from 'antd/es/button';
 
 export const getToken = (name) => {
-  const nameEQ = name + "=";
-  const ca = document.cookie.split(";");
+  const nameEQ = name + '=';
+  const ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) === " ") c = c.substring(1, c.length);
+    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
     if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
   }
   return null;
@@ -71,44 +74,62 @@ const WalletBalance = styled.div`
   border-radius: 8px;
 `;
 
+const notifications = (
+  <Menu>
+    <Menu.Item key='1'>
+      <Link to='/notification1'>Notification 1</Link>
+    </Menu.Item>
+    <Menu.Item key='2'>
+      <Link to='/notification2'>Notification 2</Link>
+    </Menu.Item>
+    <Menu.Item key='3'>
+      <Link to='/notification3'>Notification 3</Link>
+    </Menu.Item>
+  </Menu>
+);
+
 function Navbar() {
+  const auth = useAuthContext();
   const [token, setToken] = useState(null);
   const [profileData, setProfileData] = useState(null);
 
   const handleLogout = () => {
     setToken(null);
-    document.cookie = "token" + "=; Max-Age=-99999999;";
-    window.history.pushState({}, "", "/");
+    document.cookie = 'token' + '=; Max-Age=-99999999;';
+    window.history.pushState({}, '', '/');
     window.location.reload();
   };
 
   useEffect(() => {
-    const token = getToken("token");
+    const token = getToken('token');
     setToken(token);
     (async () => {
       const response = await fetch(`${API_URL}/app-users/GetCurrentAppUser`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (response && response.ok) {
         const data = await response.json();
+        console.log(data);
         setProfileData(data);
-        return;
+        auth?.login(data?.user);
+      } else {
+        setProfileData(null);
       }
-      setProfileData(null);
     })();
   }, []);
 
   const handleLogin = () => {
     if (!token) {
-      window.history.pushState({}, "", "/login");
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      window.history.pushState({}, '', '/login');
+      window.dispatchEvent(new PopStateEvent('popstate'));
     } else {
-      document.cookie = "token" + "=; Max-Age=-99999999;";
-      window.history.pushState({}, "", "/");
+      document.cookie = 'token' + '=; Max-Age=-99999999;';
+      window.history.pushState({}, '', '/');
       window.location.reload();
     }
   };
@@ -116,65 +137,83 @@ function Navbar() {
   return (
     <NavbarContainer>
       <NavLogo>
-        <Link to="/">
-          <img src={logo} alt="Logo" />
+        <Link to='/'>
+          <img src={logo} alt='Logo' />
         </Link>
       </NavLogo>
       <NavMenu>
         {token && profileData && profileData.wallet && (
-          <Link to="/wallet">
-            <WalletBalance>
-              <WalletOutlined />
-              <span>{profileData.wallet.amount.toLocaleString()} đ</span>
-            </WalletBalance>
-          </Link>
+          <>
+            <Dropdown
+              overlay={notifications}
+              placement='bottomRight'
+              trigger={['click']}
+            >
+              <Badge count={5}>
+                <BellOutlined style={{ fontSize: '24px' }} />
+              </Badge>
+            </Dropdown>
+            <Link to='/wallet'>
+              <WalletBalance>
+                <WalletOutlined />
+                <span>{profileData.wallet.amount.toLocaleString()} đ</span>
+              </WalletBalance>
+            </Link>
+          </>
         )}
-        {token && profileData && profileData.user ? (
+        {token && profileData && profileData?.user ? (
           <Dropdown
             overlay={
               <Menu>
-                <Menu.Item key="1" icon={<SettingOutlined />}>
-                  <Link to="/UserProfile">Profile Settings</Link>
+                <Menu.Item key='1' icon={<SettingOutlined />}>
+                  <Link to='/UserProfile'>Profile Settings</Link>
                 </Menu.Item>
-                <Menu.Item key="2" icon={<ProfileOutlined />}>
-                  <Link to="/TutorProfile">Tutor Profile</Link>
+                <Menu.Item key='2' icon={<ProfileOutlined />}>
+                  <Link to='/TutorProfile'>Tutor Profile</Link>
                 </Menu.Item>
-                <Menu.Item key="3" icon={<ScheduleOutlined />}>
-                  <Link to="/ScheduleProfile">Schedule Profile</Link>
+                <Menu.Item key='3' icon={<ScheduleOutlined />}>
+                  <Link to='/ScheduleProfile'>Schedule Profile</Link>
                 </Menu.Item>
-                <Menu.Item key="4" icon={<WalletOutlined />}>
-                  <Link to="/wallet">My Wallet</Link>
+                <Menu.Item key='4' icon={<WalletOutlined />}>
+                  <Link to='/wallet'>My Wallet</Link>
                 </Menu.Item>
                 <Menu.Divider />
-                <Menu.Item key="5" icon={<LogoutOutlined />} onClick={handleLogout}>
-                  <p className="font-semibold text-cyan-700">Logout</p>
+                <Menu.Item
+                  key='5'
+                  icon={<LogoutOutlined />}
+                  onClick={handleLogout}
+                >
+                  <p className='font-semibold text-cyan-700'>Logout</p>
                 </Menu.Item>
               </Menu>
             }
-            trigger={["click"]}
+            trigger={['click']}
           >
             <UserButton>
               <Avatar
-                style={{ backgroundColor: "rgb(14 116 144)" }}
+                style={{ backgroundColor: 'rgb(14 116 144)' }}
                 icon={<UserOutlined />}
               />
-              <span className="ml-2 font-semibold text-cyan-700">
+              <span className='ml-2 font-semibold text-cyan-700'>
                 {profileData.user.firstName}&nbsp;{profileData.user.lastName}
               </span>
             </UserButton>
           </Dropdown>
         ) : (
           <>
-            <Link to="/login">
-              <NavButton type="primary" onClick={handleLogin}>
+            <Link to='/login'>
+              <NavButton type='primary' onClick={handleLogin}>
                 Login
               </NavButton>
             </Link>
-            <Link to="/register">
+            <Link to='/register'>
               <NavButton>Sign Up</NavButton>
             </Link>
           </>
         )}
+        <Link to='/wallet'>
+          <NavButton icon={<BiSolidWallet />} />
+        </Link>
       </NavMenu>
     </NavbarContainer>
   );

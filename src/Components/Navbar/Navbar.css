@@ -6,23 +6,24 @@
     box-shadow: 0 1px 3px -2px black;
     height: 80px;
     margin-top: 20px;
-  }
-  
-  .nav-logo {
+}
+
+.nav-logo {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-left: 20px;
     width: 6%;
-  }
-  
-  .nav-login-button {
+
+}
+
+.nav-login-button {
     display: flex;
     align-items: center;
     gap: 45px;
-  }
-  
-  .nav-login-button button.button {
+}
+
+.nav-login-button button.button {
     text-decoration: none;
     width: 90px; /* Reasonable button size */
     height: 42px;
@@ -33,4 +34,4 @@
     font-size: 14px;
     background: rgb(107, 103, 103);
     color: white;
-  }
+}

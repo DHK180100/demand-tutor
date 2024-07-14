@@ -2,13 +2,14 @@ import React from "react";
 import { Button } from "antd";
 import "tailwindcss/tailwind.css";
 
+const classes = ["Class 1", "Class 2", "Class 3", "Class 4", "Class 5"];
 
-const TeacherClasses = ({ teach }) => {
+const TeacherClasses = () => {
   return (
     <div className="flex justify-center my-4">
-      {teach && teach.length > 0 && teach.map((className, index) => (
+      {classes.map((className, index) => (
         <Button key={index} className="mx-1">
-          {className.subject}
+          {className}
         </Button>
       ))}
     </div>

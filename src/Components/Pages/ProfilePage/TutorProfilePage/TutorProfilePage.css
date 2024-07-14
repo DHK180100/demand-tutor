@@ -81,12 +81,7 @@
 }
 
 .tutor-profile-input-bars div {
-    flex: 1;
-    margin-right: 10px;
-}
-
-.tutor-profile-input-bars div:last-child {
-    margin-right: 0;
+    width: 48%;
 }
 
 .tutor-profile-input-bars label {
@@ -347,18 +342,4 @@ input:checked + .slider:before {
     color: white;
     border: none;
     border-radius: 5px;
-}
-
-.edit-button {
-    background-color: #007bff; /* Button background color */
-    color: white; /* Button text color */
-    border: none; /* Remove default button border */
-    padding: 10px 20px; /* Button padding */
-    cursor: pointer; /* Cursor style on hover */
-    border-radius: 5px; /* Optional: Add border radius */
-    transition: background-color 0.3s ease; /* Optional: Smooth background color transition */
-}
-
-.edit-button:hover {
-    background-color: #0056b3; /* Darker background color on hover */
 }
