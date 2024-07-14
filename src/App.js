@@ -1,30 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import MainPage from './Components/Pages/MainPage/MainPage'
 import { useWebSocket } from './Components/Contexts/SockContext';
 import WithNavbar from './Components/Layout/WithNavbar';
 import { getToken } from './Components/Navbar/Navbar';
-import AdminPage from './Components/Pages/Admin/AdminPage';
 import ChatBox from './Components/Pages/DetailPage/ChatBox';
 import TeacherDetailPage from './Components/Pages/DetailPage/TeacherDetailPage';
 import IdentityCardPage from './Components/Pages/IdentityCard/IdentityCardPage';
 import Login from './Components/Pages/Login/Login';
 import MainPage from './Components/Pages/MainPage/MainPage';
-import ScheduleProfile from './Components/Pages/ProfilePage/ScheduleProfile/ScheduleProfile';
 import TutorProfilePage from './Components/Pages/ProfilePage/TutorProfilePage/TutorProfilePage';
 import UserProfilePage from './Components/Pages/ProfilePage/UserProfilePage/UserProfilePage';
 import Register from './Components/Pages/Register/Register';
 import WalletPage from './Components/Pages/WalletPage/WalletPage';
 import { API_URL } from './config';
 import AdminPage from './Components/Pages/Admin/AdminPage';
-import { Routes, Route } from 'react-router-dom';
-import WithNavbar from './Components/Layout/WithNavbar';
 import WithoutNavbar from './Components/Layout/WithoutNavbar';
-import UserProfilePage from './Components/Pages/ProfilePage/UserProfilePage/UserProfilePage';
-import TutorProfilePage from './Components/Pages/ProfilePage/TutorProfilePage/TutorProfilePage';
 import ScheduleProfile from './Components/Pages/ProfilePage/ScheduleProfile/ScheduleProfile';
-import IdentityCardPage from './Components/Pages/IdentityCard/IdentityCardPage';
 import ToanTeacher from './Components/Pages/SubjectPages/ToanTeacher';
 import LyTeacher from './Components/Pages/SubjectPages/LyTeacher';
 import HoaTeacher from './Components/Pages/SubjectPages/HoaTeacher';
@@ -35,15 +27,14 @@ import AnhTeacher from './Components/Pages/SubjectPages/AnhTeacher';
 import OtherTeacher from './Components/Pages/SubjectPages/OtherTeacher';
 
 function App() {
-  const [visible, setVisible] = useState(false)
-  const socket = useWebSocket()
-
+  const [visible, setVisible] = useState(false);
+  const socket = useWebSocket();
 
   useEffect(() => {
-    // Kết nối WebSocket khi component được mount
+    // Connect WebSocket when component is mounted
     socket?.connect?.(onMessageReceived);
 
-    // Ngắt kết nối WebSocket khi component bị unmount
+    // Disconnect WebSocket when component is unmounted
     return () => {
       socket?.disconnect();
     };
@@ -60,12 +51,12 @@ function App() {
       },
     });
 
-    const currentUser = await resp.json()
+    const currentUser = await resp.json();
 
     if (result?.receiver === currentUser?.user?.login) {
-      setVisible(true)
+      setVisible(true);
     }
-  }
+  };
 
   return (
     <>
@@ -89,7 +80,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>
-        <Route element={<WithNavbar />}> {/* Admin Page with Navbar */}
+        <Route element={<WithNavbar />}>
           <Route path="/admin" element={<AdminPage />} />
         </Route>
       </Routes>
