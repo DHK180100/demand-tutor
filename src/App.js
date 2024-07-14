@@ -25,6 +25,7 @@ import VanTeacher from './Components/Pages/SubjectPages/VanTeacher';
 import DiaTeacher from './Components/Pages/SubjectPages/DiaTeacher';
 import AnhTeacher from './Components/Pages/SubjectPages/AnhTeacher';
 import OtherTeacher from './Components/Pages/SubjectPages/OtherTeacher';
+import BraintreeDropIn from './Components/Pages/payment/BraintreeDropIn';
 
 function App() {
   const [visible, setVisible] = useState(false);
@@ -78,6 +79,7 @@ function App() {
           <Route path="/AnhTeacher" element={<AnhTeacher />} />
           <Route path="/OtherTeacher" element={<OtherTeacher />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/braintree" element={<BraintreeDropIn/>} />
           <Route path="/register" element={<Register />} />
         </Route>
         <Route element={<WithNavbar />}>
