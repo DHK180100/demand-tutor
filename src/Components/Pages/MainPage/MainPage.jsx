@@ -13,6 +13,7 @@ import { API_URL } from "../../../config";
 function MainPage() {
   const [slideIndex, setSlideIndex] = useState(1);
   const [teacherData, setTeacherData] = useState(null)
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
@@ -81,6 +82,25 @@ function MainPage() {
     console.log("id", id)
   };
 
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`${API_URL}/app-users/SearchTutor/${searchQuery}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setTeacherData(data);
+        return;
+      }
+      setTeacherData(null);
+    } catch (error) {
+      console.error("Failed to fetch search results:", error);
+    }
+  };
+
 
   console.log('teacherData', teacherData);
   return (
@@ -114,9 +134,15 @@ function MainPage() {
           </div>
         </div>
         <div className="search-container">
-          <input type="text" placeholder="Search..." className="search-bar" />
-          <button className="filter-button">
-            <FilterOutlined /> Filter
+          <input
+            type="text"
+            placeholder="Search..."
+            className="search-bar"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="filter-button" onClick={handleSearch}>
+            <FilterOutlined /> Search
           </button>
         </div>
         <h2 className="text-xl font-semibold my-4 uppercase">
