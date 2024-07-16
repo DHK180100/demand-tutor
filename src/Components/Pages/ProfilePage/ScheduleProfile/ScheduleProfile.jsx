@@ -1,55 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import './../TutorProfilePage/TutorProfilePage.css';
+import Select from 'react-select';
+import './../ScheduleProfile/ScheduleProfile.css';
 import ProfileSideBar from '../ProfileSideBar/ProfileSideBar';
-import classroom_image from '../../../Assets/classroom.png';
-import teacher_image from '../../../Assets/teacher.png';
 import { getToken } from '../../../Navbar/Navbar';
 import { API_URL } from '../../../../config';
 
 const subjects = [
-    { name: 'Math', levels: [10, 11, 12] },
-    { name: 'Physic', levels: [10, 11, 12] },
-    { name: 'Chemistry', levels: [10, 11, 12] },
-    { name: 'English', levels: [10, 11, 12] },
+    { value: 'MATH_10', label: 'Math 10' },
+    { value: 'MATH_11', label: 'Math 11' },
+    { value: 'MATH_12', label: 'Math 12' },
+    { value: 'PHYSIC_10', label: 'Physic 10' },
+    { value: 'PHYSIC_11', label: 'Physic 11' },
+    { value: 'PHYSIC_12', label: 'Physic 12' },
+    { value: 'ENGLISH_10', label: 'English 10' },
+    { value: 'ENGLISH_11', label: 'English 11' },
+    { value: 'ENGLISH_12', label: 'English 12' },
+    { value: 'CHEMISTRY_10', label: 'Chemistry 10' },
+    { value: 'CHEMISTRY_11', label: 'Chemistry 11' },
+    { value: 'CHEMISTRY_12', label: 'Chemistry 12' },
 ];
+const platformTypes = ['DISCORD', 'ZOOM', 'MEET'];
 
 function ScheduleProfile() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    const renderSubjectCheckboxes = () => {
-        return subjects.map((subject, subjectIndex) => (
-            <div key={subjectIndex} className="subject-group">
-                <h4>{subject.name}</h4>
-                {subject.levels.length > 0 ? (
-                    subject.levels.map((level, levelIndex) => (
-                        <div key={levelIndex} className="checkbox-item">
-                            <input
-                                type="checkbox"
-                                id={`subject-${subjectIndex}-level-${level}`}
-                                name={`subject-${subjectIndex}-level-${level}`}
-                            />
-                            <label htmlFor={`subject-${subjectIndex}-level-${level}`}>{`${subject.name} ${level}`}</label>
-                        </div>
-                    ))
-                ) : (
-                    <div className="checkbox-item">
-                        <input
-                            type="checkbox"
-                            id={`subject-${subjectIndex}`}
-                            name={`subject-${subjectIndex}`}
-                        />
-                        <label htmlFor={`subject-${subjectIndex}`}>{subject.name}</label>
-                    </div>
-                )}
-            </div>
-        ));
-    };
     const [tutorDetails, setTutorDetails] = useState(null);
+    const [selectedSubjects, setSelectedSubjects] = useState([]);
+    const [beTutor, setBeTutor] = useState(false);
+    const [platformURLs, setPlatformURLs] = useState({
+        DISCORD: '',
+        ZOOM: '',
+        MEET: ''
+    });
+
     useEffect(() => {
         (async () => {
             try {
-                const token = getToken("token")
+                const token = getToken("token");
                 const response = await fetch(`${API_URL}/app-users/getTutorProfile`, {
                     method: "GET",
                     headers: {
@@ -62,10 +50,17 @@ function ScheduleProfile() {
                 }
                 const data = await response.json();
                 setTutorDetails(data);
+                setBeTutor(data.beTutor);
+                setSelectedSubjects(data.teachs.map(t => subjects.find(s => s.value === t.subject)));
+                const urls = data.contacts.reduce((acc, contact) => {
+                    acc[contact.type] = contact.urlContact;
+                    return acc;
+                }, {});
+                setPlatformURLs(urls);
             } catch (err) {
                 setTutorDetails(null);
             }
-        })()
+        })();
     }, []);
 
     const updateTutorDetails = async (updatedDetails) => {
@@ -81,18 +76,25 @@ function ScheduleProfile() {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-
             const data = await response.json();
             return data;
         } catch (err) {
             console.error('Failed to update user profile:', err);
             return null;
         }
-    }
+    };
 
     const handleChange = (e, type) => {
         const { value } = e.target;
         setTutorDetails({ ...tutorDetails, [type]: value });
+    };
+
+    const handleSubjectChange = (selectedOptions) => {
+        setSelectedSubjects(selectedOptions);
+    };
+
+    const handlePlatformChange = (e, type) => {
+        setPlatformURLs({ ...platformURLs, [type]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
@@ -101,11 +103,22 @@ function ScheduleProfile() {
         setError(null);
         setSuccess(null);
 
+        const updatedDetails = {
+            ...tutorDetails,
+            teachs: selectedSubjects.map(subject => ({ subject: subject.value })),
+            beTutor: beTutor,
+            contacts: platformTypes.map(type => ({
+                type,
+                urlContact: platformURLs[type]
+            }))
+        };
+
         try {
-            const updatedProfile = await updateTutorDetails(tutorDetails);
+            const updatedProfile = await updateTutorDetails(updatedDetails);
             if (updatedProfile) {
                 setSuccess('Cập nhật hồ sơ thành công!');
-                alert('Cập nhật hồ sơ thành công!')
+                alert('Cập nhật hồ sơ thành công!');
+                window.location.reload(); // Tải lại trang sau khi cập nhật thành công
             }
         } catch (error) {
             setError('Cập nhật hồ sơ thất bại');
@@ -115,73 +128,83 @@ function ScheduleProfile() {
         }
     };
 
-    console.log("tutorDetails", tutorDetails)
-    if (!tutorDetails) return <></>
+    if (!tutorDetails) return <></>;
 
     return (
-        <div>
-            <div className="tutor-profile-container">
-                <ProfileSideBar />
-                <div className="tutor-profile-content">
-                    <div className="tutor-fixed-row">
-                        <div className="tutor-image-container">
-                            <img src={classroom_image} alt="Classroom" className="classroom-profile-image" />
-                        </div>
+        <div className="tutor-profile-container">
+            <ProfileSideBar />
+            <div className="tutor-profile-content">
+                <div className="tutor-row">
+                    <div className="tutor-profile">
+                        <img src={tutorDetails.image} alt="Classroom" className="tutor-profile-image rounded-image" />
                     </div>
-                    <div className="tutor-row">
-                        <div className="tutor-profile">
-                            <img src={tutorDetails.image} alt="Classroom" className="tutor-profile-image rounded-image" />
-                        </div>
-                        <div className='tutor-profile-details'>
-                            <h3>{tutorDetails.fname}</h3>
-                            <p>{tutorDetails.email}</p>
-                        </div>
+                    <div className="tutor-profile-details">
+                        <h3>{tutorDetails.lname}</h3>
+                        <p>{tutorDetails.email}</p>
                     </div>
-                    <div className="tutor-toggle-container">
-                        <div className="tutor-toggle">
-                            <label className="toggle-label">Be Tutor</label>
-                            <label className="switch">
-                                <input type="checkbox" />
-                                <span className="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div className="subject-checkboxes-container">
-                        {renderSubjectCheckboxes()}
-                    </div>
-                    <div className="introduce-yourself-container">
-                        <h3>Introduce yourself</h3>
-                        <textarea
-                            placeholder="Write something about yourself..."
-                            value={tutorDetails.introduce}
-                            onChange={(e) => handleChange(e, 'introduce')}>
-                        </textarea>
-                    </div>
-                    <div className="additional-info-container">
-                        <div className="info-row">
-                            <label>Rental Cost (VND)</label>
+                </div>
+                <div className="tutor-toggle-container">
+                    <div className="tutor-toggle">
+                        <label className="toggle-label">Be a Tutor</label>
+                        <label className="switch">
                             <input
-                                type="number"
+                                type="checkbox"
+                                checked={beTutor}
+                                onChange={() => setBeTutor(!beTutor)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div className="subject-select-container">
+                    <Select
+                        isMulti
+                        value={selectedSubjects}
+                        options={subjects}
+                        onChange={handleSubjectChange}
+                        placeholder="Select subjects"
+                    />
+                </div>
+                <div className="introduce-yourself-container">
+                    <textarea
+                        value={tutorDetails.introduce}
+                        onChange={(e) => handleChange(e, 'introduce')}
+                        placeholder="Introduce yourself"
+                    />
+                </div>
+                <div className="additional-info-container">
+                    <div className="info-row">
+                        <label>Rental Cost (VND)</label>
+                        <input
+                            type="number"
+                            className="info-button"
+                            value={tutorDetails.price}
+                            onChange={(e) => handleChange(e, 'price')}
+                            min="0"
+                        />
+                    </div>
+                    {platformTypes.map((type) => (
+                        <div className="info-row" key={type}>
+                            <label>{type} URL</label>
+                            <input
                                 className="info-button"
-                                value={tutorDetails.price}
-                                onChange={(e) => handleChange(e, 'price')}
-                                min="0"
+                                type="text"
+                                value={platformURLs[type]}
+                                onChange={(e) => handlePlatformChange(e, type)}
                             />
                         </div>
-                        <div className="info-row">
-                            <label>Choose Platform</label>
-                            <button className="info-button">Choose</button>
-                        </div>
-                        <div className="info-row">
-                            <label className="bold-label">Platform</label>
-                        </div>
-                    </div>
-                    <div className="save-button-container">
-                        <button
-                            onClick={(e) => handleSubmit(e)}
-                            className="edit-button">EDIT
-                        </button>
-                    </div>
+                    ))}
+                </div>
+                {error && <div className="error-message">{error}</div>}
+                {success && <div className="success-message">{success}</div>}
+                <div className="save-button-container">
+                    <button
+                        className="edit-button"
+                        onClick={handleSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? 'Saving...' : 'Save'}
+                    </button>
                 </div>
             </div>
         </div>

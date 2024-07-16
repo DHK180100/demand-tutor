@@ -92,11 +92,6 @@ function UserProfilePage() {
     <div className="user-profile-container">
       <ProfileSideBar />
       <div className="user-profile-content">
-        <div className="fixed-row">
-          <div className="image-container">
-            <img src={user.imgUrl} alt="Classroom" className="profile-image" />
-          </div>
-        </div>
         <div className="row">
           <div className="user-profile">
             <img src={user.imgUrl} alt="Classroom" className="user-profile-image rounded-image" />
@@ -105,9 +100,6 @@ function UserProfilePage() {
             <h3>{user.lastName}</h3>
             <p>{user.email}</p>
           </div>
-          <button
-            onClick={(e) => handleSubmit(e)}
-            className="edit-button">EDIT</button>
         </div>
         <div className="user-profile-name-row">
           <div className='user-profile-input-bars'>
@@ -162,6 +154,11 @@ function UserProfilePage() {
           <div className='email-details'>
             <MdOutlineEmail />
             <label>{user.email}</label>
+          </div>
+          <div>
+            <button
+              onClick={(e) => handleSubmit(e)}
+              className="edit-button">EDIT</button>
           </div>
           <p></p>
         </div>
