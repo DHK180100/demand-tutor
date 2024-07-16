@@ -1,15 +1,29 @@
 // Components/Pages/SubjectPages/HoaTeacher.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SubjectPageTemplate from './SubjectPageTemplate';
+import { API_URL } from '../../../config';
 
 const ChemistryTeacher = () => {
-  const chemistryTeachers = [
-    { name: 'Teacher X', description: 'Chemistry Teacher', image: 'path/to/imageX.jpg', onClick: () => { }, classTeacher: 'Class X' },
-    { name: 'Teacher Y', description: 'Chemistry Teacher', image: 'path/to/imageY.jpg', onClick: () => { }, classTeacher: 'Class Y' },
-    { name: 'Teacher Z', description: 'Chemistry Teacher', image: 'path/to/imageZ.jpg', onClick: () => { }, classTeacher: 'Class Z' }
-  ];
+  const [teachers, setTeachers] = useState([]);
 
-  return <SubjectPageTemplate subject="Chemistry" teachers={chemistryTeachers} />;
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${API_URL}/tutors/by-subject?subject=chemistry`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setTeachers(data)
+        return
+      }
+      setTeachers(null)
+    })()
+  }, []);
+
+  return <SubjectPageTemplate subject="chemistry" teachers={teachers} />;
 };
 
 export default ChemistryTeacher;

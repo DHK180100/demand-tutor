@@ -1,15 +1,32 @@
 // Components/Pages/SubjectPages/ToanTeacher.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SubjectPageTemplate from './SubjectPageTemplate';
+import { API_URL } from '../../../config';
+
 
 const MathTeacher = () => {
-  const mathTeachers = [
-    { name: 'Teacher 1', description: 'Math Teacher', image: 'path/to/image1.jpg', onClick: () => { }, classTeacher: 'Class 1' },
-    { name: 'Teacher 2', description: 'Math Teacher', image: 'path/to/image2.jpg', onClick: () => { }, classTeacher: 'Class 2' },
-    { name: 'Teacher 3', description: 'Math Teacher', image: 'path/to/image3.jpg', onClick: () => { }, classTeacher: 'Class 3' }
-  ];
+  const [teachers, setTeachers] = useState([]);
 
-  return <SubjectPageTemplate subject="Math" teachers={mathTeachers} />;
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${API_URL}/tutors/by-subject?subject=math`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setTeachers(data)
+        return
+      }
+      setTeachers(null)
+    })()
+  }, []);
+
+
+
+  return <SubjectPageTemplate subject="Math" teachers={teachers} />;
 };
 
 export default MathTeacher;

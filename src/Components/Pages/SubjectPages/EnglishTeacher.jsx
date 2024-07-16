@@ -1,15 +1,29 @@
 // Components/Pages/SubjectPages/AnhTeacher.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SubjectPageTemplate from './SubjectPageTemplate';
+import { API_URL } from '../../../config';
 
 const EnglishTeacher = () => {
-  const englishTeachers = [
-    { name: 'Teacher 1', description: 'English Teacher', image: 'path/to/image1.jpg', onClick: () => { }, classTeacher: 'Class 1' },
-    { name: 'Teacher 2', description: 'English Teacher', image: 'path/to/image2.jpg', onClick: () => { }, classTeacher: 'Class 2' },
-    { name: 'Teacher 3', description: 'English Teacher', image: 'path/to/image3.jpg', onClick: () => { }, classTeacher: 'Class 3' }
-  ];
+  const [teachers, setTeachers] = useState([]);
 
-  return <SubjectPageTemplate subject="English" teachers={englishTeachers} />;
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${API_URL}/tutors/by-subject?subject=english`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setTeachers(data)
+        return
+      }
+      setTeachers(null)
+    })()
+  }, []);
+
+  return <SubjectPageTemplate subject="english" teachers={teachers} />;
 };
 
 export default EnglishTeacher;

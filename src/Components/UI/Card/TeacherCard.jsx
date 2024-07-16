@@ -1,13 +1,18 @@
 // TeacherCard.js
 import React from "react";
 import styled from "styled-components";
-import { Card, Avatar } from "antd";
+import { useNavigate } from "react-router-dom";
 
-const { Meta } = Card;
+const TeacherCardUI = ({ tutorID, avatar, fname, lname, status, onClick }) => {
 
-const TeacherCardUI = ({ avatar, fname, lname, status, onClick }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/teacher-detail/${tutorID}`);
+  };
+
   return (
-    <StyledCard onClick={onClick}>
+    <StyledCard onClick={handleCardClick}>
       <img src={avatar} alt={`${fname} ${lname}`} className="teacher-image" />
       <h5 className="teacher-name">{`${fname} ${lname}`}</h5>
       <p className="teacher-description" style={{ color: status === 'READY' ? 'green' : 'red' }}>{status}</p>

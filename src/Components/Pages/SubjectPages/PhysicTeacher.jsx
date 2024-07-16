@@ -1,15 +1,30 @@
 // Components/Pages/SubjectPages/LyTeacher.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SubjectPageTemplate from './SubjectPageTemplate';
+import { API_URL } from '../../../config';
 
 const PhysicTeacher = () => {
-  const physicsTeachers = [
-    { name: 'Teacher A', description: 'Physics Teacher', image: 'path/to/imageA.jpg', onClick: () => { }, classTeacher: 'Class A' },
-    { name: 'Teacher B', description: 'Physics Teacher', image: 'path/to/imageB.jpg', onClick: () => { }, classTeacher: 'Class B' },
-    { name: 'Teacher C', description: 'Physics Teacher', image: 'path/to/imageC.jpg', onClick: () => { }, classTeacher: 'Class C' }
-  ];
 
-  return <SubjectPageTemplate subject="Physics" teachers={physicsTeachers} />;
+  const [teachers, setTeachers] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${API_URL}/tutors/by-subject?subject=physic`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response && response.ok) {
+        const data = await response.json();
+        setTeachers(data)
+        return
+      }
+      setTeachers(null)
+    })()
+  }, []);
+
+  return <SubjectPageTemplate subject="physic" teachers={teachers} />;
 };
 
 export default PhysicTeacher;

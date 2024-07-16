@@ -75,9 +75,12 @@ function MainPage() {
     showSlides(slideIndex);
   }, [slideIndex]);
 
+
   const handleClick = (id) => {
-    navigate(`/teacher-detail/${id}`);
+    // navigate(`/teacher-detail/${id}`);
+    console.log("id", id)
   };
+
 
   console.log('teacherData', teacherData);
   return (
@@ -123,6 +126,7 @@ function MainPage() {
           {teacherData && teacherData.map((teacher) => (
             <TeacherCardUI
               key={teacher.tutorId}
+              tutorID={teacher.tutorId}
               fname={teacher.fname}
               lname={teacher.lname}
               status={teacher.status}

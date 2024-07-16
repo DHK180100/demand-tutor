@@ -102,7 +102,7 @@ function UserProfilePage() {
             <img src={user.imgUrl} alt="Classroom" className="user-profile-image rounded-image" />
           </div>
           <div className='profile-details'>
-            <h3>{user.firstName}&nbsp;{user.lastName}</h3>
+            <h3>{user.lastName}</h3>
             <p>{user.email}</p>
           </div>
           <button

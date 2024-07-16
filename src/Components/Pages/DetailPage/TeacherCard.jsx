@@ -166,7 +166,6 @@ const TeacherCard = ({
   }, []);
 
 
-
   const hireCost = useMemo(() => {
     return price * hireDuration;
   }, [hireDuration, price]);
@@ -249,12 +248,11 @@ const TeacherCard = ({
     setIsChatModalVisible(false);
   };
 
-
   return (
     <CardContainer>
       <div>
         <TeacherImage
-          src='https://lsvn.vn/storage/uploads/files/1014/6013c1d703084.jpg'
+          src={img}
           alt='Teacher'
         />
         <p

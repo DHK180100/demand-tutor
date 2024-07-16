@@ -17,7 +17,6 @@ const TeacherDetailPage = () => {
   useEffect(() => {
     (async () => {
       try {
-        const token = getToken('token');
         const response = await fetch(`${API_URL}/tutors/GetCustom/${id}`, {
           method: 'GET',
           headers: {
@@ -34,7 +33,7 @@ const TeacherDetailPage = () => {
       }
     })();
   }, [id]);
-
+  console.log("tutor", tutor)
   if (!tutor) return <></>;
   return (
     <div className='teacher-detail-page container mx-auto p-4'>
@@ -53,6 +52,7 @@ const TeacherDetailPage = () => {
         login={tutor.userName}
         teach={tutor.teach}
         numberFollow={tutor.numberFollow}
+        img={tutor.img}
       />
       <TeacherInfo information={tutor.information} />
       <TeacherVideo videoUrl={tutor.videoUrl} />
