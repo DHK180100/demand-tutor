@@ -1,6 +1,6 @@
 import React from "react";
 import "./Sidebar.css";
-
+import { Link } from "react-router-dom";
 import signal_png from "../../Assets/signal.png";
 
 function Sidebar() {
@@ -9,36 +9,30 @@ function Sidebar() {
       <h3>Subject</h3>
       <ul>
         <li>
-          <img src={signal_png} />
-          Toán
+          <Link to="/MathTeacher">
+            <img src={signal_png} alt="Signal" />
+            Math
+          </Link>
         </li>
         <li>
-          <img src={signal_png} />
-          Lý
+          <Link to="/PhysicTeacher">
+            <img src={signal_png} alt="Signal" />
+            Physic
+          </Link>
+
         </li>
         <li>
-          <img src={signal_png} />
-          Hóa
+          <Link to="/ChemistryTeacher">
+            <img src={signal_png} alt="Signal" />
+            Chemistry
+          </Link>
+
         </li>
         <li>
-          <img src={signal_png} />
-          Sử
-        </li>
-        <li>
-          <img src={signal_png} />
-          Văn
-        </li>
-        <li>
-          <img src={signal_png} />
-          Địa
-        </li>
-        <li>
-          <img src={signal_png} />
-          Anh
-        </li>
-        <li>
-          <img src={signal_png} />
-          Other
+          <Link to="/EnglishTeacher">
+            <img src={signal_png} alt="Signal" />
+            English
+          </Link>
         </li>
       </ul>
     </div>

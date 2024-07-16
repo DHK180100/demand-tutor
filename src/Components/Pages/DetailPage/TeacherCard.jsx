@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Button, Rate, Modal, Select, Input } from 'antd';
-import { UserAddOutlined } from '@ant-design/icons';
 import TeacherClasses from './TeacherClasses';
 import { formatCurrency, getToken } from '../../../utils/common';
 import { API_URL } from '../../../config';
 import ChatBox from '../../Pages/DetailPage/ChatBox'; // Updated import path
+import { useNavigate } from 'react-router-dom';
 
 const CardContainer = styled.div`
   display: flex;
@@ -146,7 +146,7 @@ const TeacherCard = ({
   const [hireDuration, setHireDuration] = useState(1);
   const [message, setMessage] = useState('');
   const [profileData, setProfileData] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       const response = await fetch(`${API_URL}/app-users/GetCurrentAppUser`, {
@@ -165,15 +165,25 @@ const TeacherCard = ({
     })();
   }, []);
 
+
+
   const hireCost = useMemo(() => {
     return price * hireDuration;
   }, [hireDuration, price]);
 
   const showHireModal = () => {
-    setIsHireModalVisible(true);
+    if (!token) {
+      navigate('/login');
+    } else {
+      setIsHireModalVisible(true);
+    }
   };
 
   const handleHireOk = async () => {
+    if (!profileData || !profileData.id) {
+      navigate('/login'); // Chuyển hướng đến trang đăng nhập nếu không có profileData hoặc id
+      return;
+    }
     setIsHireModalVisible(false);
     const values = {
       timeHire: hireDuration,
@@ -185,6 +195,7 @@ const TeacherCard = ({
         id: tutorID,
       },
     };
+
     if (profileData.wallet.amount < hireCost)
       return setIsPaymentModalVisible(true);
     try {
@@ -227,12 +238,17 @@ const TeacherCard = ({
   };
 
   const showChatModal = () => {
-    setIsChatModalVisible(true);
+    if (!token) {
+      navigate('/login');
+    } else {
+      setIsChatModalVisible(true);
+    }
   };
 
   const handleChatClose = () => {
     setIsChatModalVisible(false);
   };
+
 
   return (
     <CardContainer>
@@ -251,9 +267,6 @@ const TeacherCard = ({
       <TeacherInfo>
         <TeacherName>
           <p className=''>{firstName}</p>
-          <p className='mr-5'>
-            <UserAddOutlined />
-          </p>
         </TeacherName>
         <Info>
           <InfoItem>
@@ -322,6 +335,8 @@ const TeacherCard = ({
               <Select.Option value='1'>1 hour</Select.Option>
               <Select.Option value='2'>2 hours</Select.Option>
               <Select.Option value='3'>3 hours</Select.Option>
+              <Select.Option value='4'>4 hours</Select.Option>
+              <Select.Option value='5'>5 hours</Select.Option>
             </Select>
           </div>
           <p>Cost: {formatCurrency(hireCost)}</p>

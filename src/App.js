@@ -15,17 +15,12 @@ import Register from './Components/Pages/Register/Register';
 import WalletPage from './Components/Pages/WalletPage/WalletPage';
 import { API_URL } from './config';
 import AdminPage from './Components/Pages/Admin/AdminPage';
-import WithoutNavbar from './Components/Layout/WithoutNavbar';
 import ScheduleProfile from './Components/Pages/ProfilePage/ScheduleProfile/ScheduleProfile';
-import ToanTeacher from './Components/Pages/SubjectPages/ToanTeacher';
-import LyTeacher from './Components/Pages/SubjectPages/LyTeacher';
-import HoaTeacher from './Components/Pages/SubjectPages/HoaTeacher';
-import SuTeacher from './Components/Pages/SubjectPages/SuTeacher';
-import VanTeacher from './Components/Pages/SubjectPages/VanTeacher';
-import DiaTeacher from './Components/Pages/SubjectPages/DiaTeacher';
-import AnhTeacher from './Components/Pages/SubjectPages/AnhTeacher';
-import OtherTeacher from './Components/Pages/SubjectPages/OtherTeacher';
 import BraintreeDropIn from './Components/Pages/payment/BraintreeDropIn';
+import MathTeacher from './Components/Pages/SubjectPages/MathTeacher';
+import PhysicTeacher from './Components/Pages/SubjectPages/PhysicTeacher';
+import ChemistryTeacher from './Components/Pages/SubjectPages/ChemistryTeacher';
+import EnglishTeacher from './Components/Pages/SubjectPages/EnglishTeacher';
 
 function App() {
   const [visible, setVisible] = useState(false);
@@ -70,16 +65,12 @@ function App() {
           <Route path="/ScheduleProfile" element={<ScheduleProfile />} />
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/IdentityCard" element={<IdentityCardPage />} />
-          <Route path="/ToanTeacher" element={<ToanTeacher />} />
-          <Route path="/LyTeacher" element={<LyTeacher />} />
-          <Route path="/HoaTeacher" element={<HoaTeacher />} />
-          <Route path="/SuTeacher" element={<SuTeacher />} />
-          <Route path="/VanTeacher" element={<VanTeacher />} />
-          <Route path="/DiaTeacher" element={<DiaTeacher />} />
-          <Route path="/AnhTeacher" element={<AnhTeacher />} />
-          <Route path="/OtherTeacher" element={<OtherTeacher />} />
+          <Route path="/MathTeacher" element={<MathTeacher />} />
+          <Route path="/PhysicTeacher" element={<PhysicTeacher />} />
+          <Route path="/ChemistryTeacher" element={<ChemistryTeacher />} />
+          <Route path="/EnglishTeacher" element={<EnglishTeacher />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/braintree" element={<BraintreeDropIn/>} />
+          <Route path="/braintree" element={<BraintreeDropIn />} />
           <Route path="/register" element={<Register />} />
         </Route>
         <Route element={<WithNavbar />}>

@@ -22,7 +22,6 @@ const TeacherDetailPage = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
           },
         });
         if (!response.ok) {
@@ -55,7 +54,6 @@ const TeacherDetailPage = () => {
         teach={tutor.teach}
         numberFollow={tutor.numberFollow}
       />
-
       <TeacherInfo information={tutor.information} />
       <TeacherVideo videoUrl={tutor.videoUrl} />
       <TeacherFeedback ratings={tutor.cusrating} />
