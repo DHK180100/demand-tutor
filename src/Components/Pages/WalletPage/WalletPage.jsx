@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Tabs, Button, Modal, Form, Input, Select, Spin } from 'antd';
 import { API_URL } from '../../../config';
 import { getToken } from "../../../utils/common";
+import { Link } from 'react-router-dom';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -58,6 +59,7 @@ const WalletPage = () => {
   const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [withdrawForm, setWithdrawForm] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -84,6 +86,28 @@ const WalletPage = () => {
     })()
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = getToken("token")
+        console.log('token', token)
+        const response = await fetch(`${API_URL}/app-users/WithdrawForm`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setWithdrawForm(data);
+      } catch (err) {
+        setWithdrawForm(null);
+      }
+    })()
+  }, []);
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -92,45 +116,64 @@ const WalletPage = () => {
     setIsModalVisible(false);
   };
 
-  const handleFinish = (values) => {
-    console.log('Received values of form: ', values);
-    // Add your submit logic here
-    setIsModalVisible(false);
+  const handleFinish = async (values) => {
+    try {
+      const token = getToken("token");
+      const response = await fetch(`${API_URL}/app-users/WithdrawForm/CreateApplication`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          appUserID: withdrawForm.appUserID, // Thay thế bằng giá trị thực tế
+          amount: values.amount,
+          bankName: withdrawForm.bankName, // Lấy từ state hoặc giá trị cứng (ví dụ: "Vietcombank")
+          bankNumber: withdrawForm.bankNumber // Lấy từ state hoặc giá trị cứng (ví dụ: "0011001234567")
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log('Withdraw application sent successfully:', data);
+      setIsModalVisible(false);
+      // Thực hiện các thao tác cần thiết sau khi gửi đơn rút tiền thành công
+    } catch (err) {
+      console.error('Error sending withdraw application:', err);
+      // Xử lý lỗi nếu cần
+    }
   };
 
 
-  if (!transactions) return <></>
+  console.log("withdrawForm", withdrawForm)
+  if (!transactions || !withdrawForm) return <></>
 
   return (
     <WalletContainer>
-      <Button type="primary" onClick={showModal}>
-        Withdrawal
-      </Button>
+      <div style={{ marginBottom: '20px' }}>
+        <Button type="primary" onClick={showModal} style={{ marginRight: '10px' }}>
+          Withdrawal
+        </Button>
+        <Link to="/braintree">
+          <Button type="primary">
+            Deposit
+          </Button>
+        </Link>
+      </div>
       <Modal title="Rút tiền" visible={isModalVisible} onCancel={handleCancel} footer={null}>
         <Form layout="vertical" onFinish={handleFinish}>
-          <Form.Item label="Số tiền rút" name="withdrawAmount" rules={[{ required: true, message: 'Please input the amount to withdraw!' }]}>
+          <Form.Item label="Số tiền rút" name="amount" rules={[{ required: true, message: 'Vui lòng nhập số tiền cần rút!' }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Kênh thanh toán" name="paymentChannel" rules={[{ required: true, message: 'Please select the payment channel!' }]}>
-            <Select>
-              <Option value="bank">Tài khoản ngân hàng</Option>
-              {/* Add other options as needed */}
-            </Select>
+          <Form.Item label="Bank Name" name="bankName" initialValue={withdrawForm.bankName}>
+            <Input readOnly />
           </Form.Item>
-          <Form.Item label="Tài khoản ngân hàng" name="bankAccount" rules={[{ required: true, message: 'Please select the bank account!' }]}>
-            <Select>
-              <Option value="select">Select...</Option>
-              {/* Add bank account options here */}
-            </Select>
-          </Form.Item>
-          <Form.Item label="Tổng tiền nhận" name="totalAmount">
+          <Form.Item label="Bank Number" name="bankNumber" initialValue={withdrawForm.bankNumber}>
             <Input readOnly />
           </Form.Item>
           <Form.Item>
-            <Button type="default" onClick={handleCancel}>
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>
+            <Button type="primary" htmlType="submit" style={{ marginLeft: '0px' }}>
               Send
             </Button>
           </Form.Item>
