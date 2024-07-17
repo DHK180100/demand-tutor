@@ -136,7 +136,7 @@ const TeacherCard = ({
   cusrating,
   information,
   login,
-  numberFollow,
+  numberFollow: initialNumberFollow,
   email,
   img
 }) => {
@@ -146,6 +146,10 @@ const TeacherCard = ({
   const [hireDuration, setHireDuration] = useState(1);
   const [message, setMessage] = useState('');
   const [profileData, setProfileData] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false); // Thêm trạng thái theo dõi
+  const [numberFollow, setNumberFollow] = useState(initialNumberFollow);
+  const [isHiring, setIsHiring] = useState(false); // Trạng thái thuê tutor
+  const [countdownTime, setCountdownTime] = useState(null); // Thời gian đếm ngược
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
@@ -180,10 +184,11 @@ const TeacherCard = ({
 
   const handleHireOk = async () => {
     if (!profileData || !profileData.id) {
-      navigate('/login'); // Chuyển hướng đến trang đăng nhập nếu không có profileData hoặc id
+      navigate('/login');
       return;
     }
-    setIsHireModalVisible(false);
+    setIsHiring(true); // Đặt trạng thái hiring khi bắt đầu quá trình thuê
+
     const values = {
       timeHire: hireDuration,
       totalPrice: hireCost,
@@ -195,8 +200,6 @@ const TeacherCard = ({
       },
     };
 
-    if (profileData.wallet.amount < hireCost)
-      return setIsPaymentModalVisible(true);
     try {
       const response = await fetch(`${API_URL}/hire-tutors/hireTutor`, {
         method: 'POST',
@@ -207,16 +210,50 @@ const TeacherCard = ({
         body: JSON.stringify(values),
       });
 
-      if (response && response.ok) {
-        //handle success
-      }
-      window.location.reload();
-    } catch (error) {
-      console.error('Error:', error);
+      if (response.ok) {
+        setIsHireModalVisible(false);
+        setIsHiring(false); // Kết thúc quá trình hiring thành công
 
-      return;
+        // Reload lại trang sau khi hiring thành công
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000); // Sau 1 giây reload lại trang
+      } else {
+        setIsHiring(false); // Đặt lại trạng thái hiring khi có lỗi
+        console.error('Failed to hire tutor');
+      }
+    } catch (error) {
+      setIsHiring(false); // Đặt lại trạng thái hiring khi có lỗi
+      console.error('Error:', error);
     }
   };
+
+  const startCountdown = () => {
+    const interval = setInterval(() => {
+      setCountdownTime(prev => prev - 1000);
+    }, 1000);
+
+    // Clear interval when countdownTime reaches 0
+    setTimeout(() => {
+      clearInterval(interval);
+      setCountdownTime(null);
+    }, countdownTime);
+  };
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${API_URL}/follows/getAllFollowedTutor`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response && response.ok) {
+        const followedTutors = await response.json();
+        setIsFollowing(followedTutors.some(tutor => tutor.tutorId === tutorID));
+      }
+    })();
+  }, [tutorID]);
 
   const handleHireCancel = () => {
     setIsHireModalVisible(false);
@@ -227,13 +264,28 @@ const TeacherCard = ({
     // Handle payment confirmation
   };
 
-  const handlePaymentCancel = () => {
-    setIsPaymentModalVisible(false);
-  };
-
-  const handleFollow = () => {
-    // Implement follow action here
-    console.log('Follow button clicked');
+  const handleFollow = async () => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/follows/FollowAndUnFollow/${tutorID}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        setIsFollowing(!isFollowing); // Cập nhật trạng thái theo dõi
+        setNumberFollow(prev => isFollowing ? prev - 1 : prev + 1); // Cập nhật số người theo dõi
+      } else {
+        console.error('Failed to follow/unfollow tutor');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const showChatModal = () => {
@@ -246,6 +298,9 @@ const TeacherCard = ({
 
   const handleChatClose = () => {
     setIsChatModalVisible(false);
+  };
+  const handlePaymentCancel = () => {
+    setIsPaymentModalVisible(false);
   };
 
   return (
@@ -303,9 +358,13 @@ const TeacherCard = ({
           <p className='text-gray-400 ml-4'>{averageRate} Ratings</p>
         </div>
         <ActionButtons>
-          <HireButton onClick={showHireModal}>HIRE</HireButton>
+          <HireButton onClick={showHireModal} disabled={isHiring}>
+            {isHiring ? 'Hiring...' : 'HIRE'}
+          </HireButton>
           <FollowButton onClick={showChatModal}>CHAT</FollowButton>
-          <FollowButton onClick={handleFollow}>FOLLOW</FollowButton>
+          <FollowButton onClick={handleFollow}>
+            {isFollowing ? 'Unfollow' : 'Follow'}
+          </FollowButton>
         </ActionButtons>
       </div>
       <Modal

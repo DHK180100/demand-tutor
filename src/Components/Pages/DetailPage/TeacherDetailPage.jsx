@@ -8,7 +8,6 @@ import TeacherVideo from './TeacherVideo';
 import TeacherFeedback from './TeacherFeedback';
 import { useParams } from 'react-router-dom';
 import { API_URL } from '../../../config';
-import { getToken } from '../../../utils/common';
 
 const TeacherDetailPage = () => {
   const { id } = useParams();
@@ -38,7 +37,7 @@ const TeacherDetailPage = () => {
   return (
     <div className='teacher-detail-page container mx-auto p-4'>
       <div className=' mb-8 w-full max-w-[1100px]'>
-        <BreadcrumbWithBackButton currentTab={'Thông tin chi tiết giáo viên'} />
+        <BreadcrumbWithBackButton currentTab={'Teacher Detail'} />
       </div>
       <TeacherCard
         tutorID={tutor.tutorID}
@@ -54,7 +53,7 @@ const TeacherDetailPage = () => {
         numberFollow={tutor.numberFollow}
         img={tutor.img}
       />
-      <TeacherInfo information={tutor.information} />
+      <TeacherInfo information={tutor.information} contacts={tutor.contact} />
       <TeacherVideo videoUrl={tutor.videoUrl} />
       <TeacherFeedback ratings={tutor.cusrating} />
     </div>

@@ -13,8 +13,8 @@ const TeacherCardUI = ({ tutorID, avatar, fname, lname, status, onClick }) => {
 
   return (
     <StyledCard onClick={handleCardClick}>
-      <img src={avatar} alt={`${fname} ${lname}`} className="teacher-image" />
-      <h5 className="teacher-name">{`${fname} ${lname}`}</h5>
+      <img src={avatar} alt={`${lname}`} className="teacher-image" />
+      <h5 className="teacher-name">{`${lname}`}</h5>
       <p className="teacher-description" style={{ color: status === 'READY' ? 'green' : 'red' }}>{status}</p>
     </StyledCard>
   );

@@ -174,7 +174,7 @@ function Navbar() {
                 icon={<UserOutlined />}
               />
               <span className='ml-2 font-semibold text-cyan-700'>
-                {profileData.user.firstName}&nbsp;{profileData.user.lastName}
+                {profileData.user.lastName}
               </span>
             </UserButton>
           </Dropdown>
