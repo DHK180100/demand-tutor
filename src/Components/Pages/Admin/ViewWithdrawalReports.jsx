@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { List, Button, Modal, Form, Input, Select, Table } from 'antd';
+import { List, Button, Modal, Form, Input, Select, Table, message } from 'antd';
+import { API_URL } from '../../../config';
+import { getToken } from '../../../utils/common';
 
 const { Option } = Select;
 
@@ -8,36 +10,23 @@ const ViewWithdrawalReports = () => {
     const [selectedReport, setSelectedReport] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    // Simulate fetching withdrawal reports
+    // Fetch withdrawal reports from API using fetch
     useEffect(() => {
-        // Replace with your actual API call
-        const fetchedReports = [
-            {
-                id: 1,
-                userId: 1,
-                name: 'John Doe',
-                email: 'john@example.com',
-                status: 'InActive',
-                amount: '50,000',
-                paymentChannel: 'Tài khoản ngân hàng',
-                bankAccount: 'Select',
-                totalAmount: '50,000',
-                viewed: false
+        const token = getToken("token")
+        fetch(`${API_URL}/wallet-transactions/wallet-transactions/withdrawal-details`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
-            {
-                id: 2,
-                userId: 2,
-                name: 'Jane Smith',
-                email: 'jane@example.com',
-                status: 'InActive',
-                amount: '70,000',
-                paymentChannel: 'Tài khoản ngân hàng',
-                bankAccount: 'Select',
-                totalAmount: '70,000',
-                viewed: false
-            },
-        ];
-        setReports(fetchedReports);
+        })
+            .then(response => response.json())
+            .then(data => {
+                setReports(data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the withdrawal reports!', error);
+            });
     }, []);
 
     const handleReportClick = (report) => {
@@ -46,10 +35,9 @@ const ViewWithdrawalReports = () => {
     };
 
     const handleConfirmViewed = () => {
-        // Mark the report as viewed
         setReports((prevReports) =>
             prevReports.map((report) =>
-                report.id === selectedReport.id ? { ...report, viewed: true } : report
+                report.appUserID === selectedReport.appUserID ? { ...report, viewed: true } : report
             )
         );
         setSelectedReport(null);
@@ -61,24 +49,78 @@ const ViewWithdrawalReports = () => {
         setIsModalVisible(false);
     };
 
-    const handleStatusChange = (reportId, status) => {
-        setReports((prevReports) =>
-            prevReports.map((report) =>
-                report.id === reportId ? { ...report, status } : report
-            )
-        );
+    const handleConfirmWithdraw = (withdrawId) => {
+        const token = getToken("token")
+        const url = `${API_URL}/wallet-transactions/wallet-transactions/${withdrawId}`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.json();
+            })
+            .then(() => {
+                setReports((prevReports) =>
+                    prevReports.map((report) =>
+                        report.withdrawTrans.id === withdrawId ? { ...report, withdrawTrans: { ...report.withdrawTrans, status: 'SUCCEED' } } : report
+                    )
+                );
+                message.success('Transaction confirmed successfully!');
+            })
+            .catch(error => {
+                console.error('There was an error confirming the withdraw!', error);
+                message.error(`Failed to confirm transaction: ${error.message}`);
+            });
+    };
+
+    const handleRejectWithdraw = (withdrawId) => {
+        const token = getToken("token")
+        const url = `${API_URL}/wallet-transactions/wallet-transactions/${withdrawId}/reject`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.json();
+            })
+            .then(() => {
+                setReports((prevReports) =>
+                    prevReports.map((report) =>
+                        report.withdrawTrans.id === withdrawId ? { ...report, withdrawTrans: { ...report.withdrawTrans, status: 'Rejected' } } : report
+                    )
+                );
+                message.success('Transaction rejected successfully!');
+            })
+            .catch(error => {
+                console.error('There was an error rejecting the withdraw!', error);
+                message.error(`Failed to reject transaction: ${error.message}`);
+            });
     };
 
     const columns = [
         {
             title: 'ID',
-            dataIndex: 'userId',
-            key: 'userId',
+            dataIndex: 'appUserID',
+            key: 'appUserID',
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'Last Name',
+            dataIndex: 'lname',
+            key: 'lname',
         },
         {
             title: 'Email',
@@ -86,12 +128,24 @@ const ViewWithdrawalReports = () => {
             key: 'email',
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (text) => (
-                <span>{text === 'Active' ? 'Active' : 'InActive'}</span>
-            ),
+            title: 'Amount',
+            dataIndex: ['withdrawTrans', 'amount'],
+            key: 'amount',
+        },
+        {
+            title: 'Type',
+            dataIndex: ['withdrawTrans', 'type'],
+            key: 'type',
+        },
+        {
+            title: 'Transaction Status',
+            dataIndex: ['withdrawTrans', 'status'],
+            key: 'transactionStatus',
+        },
+        {
+            title: 'Created At',
+            dataIndex: ['withdrawTrans', 'createAt'],
+            key: 'createAt',
         },
         {
             title: 'Actions',
@@ -100,15 +154,15 @@ const ViewWithdrawalReports = () => {
                 <div>
                     <Button
                         type="primary"
-                        onClick={() => handleStatusChange(record.id, 'Active')}
-                        disabled={record.status === 'Active'}
+                        onClick={() => handleConfirmWithdraw(record.withdrawTrans.id)}
+                        disabled={record.withdrawTrans.status !== 'VERIFING'}
                     >
                         Confirm
                     </Button>
                     <Button
                         type="danger"
-                        onClick={() => handleStatusChange(record.id, 'InActive')}
-                        disabled={record.status === 'InActive'}
+                        onClick={() => handleRejectWithdraw(record.withdrawTrans.id)}
+                        disabled={record.withdrawTrans.status !== 'VERIFING'}
                     >
                         Reject
                     </Button>
@@ -123,7 +177,7 @@ const ViewWithdrawalReports = () => {
     return (
         <div>
             <h1>View Withdrawal Reports</h1>
-            <Table dataSource={reports} columns={columns} rowKey="id" />
+            <Table dataSource={reports} columns={columns} rowKey="appUserID" />
 
             <Modal
                 title="Rút tiền"
@@ -140,20 +194,23 @@ const ViewWithdrawalReports = () => {
             >
                 {selectedReport && (
                     <Form layout="vertical">
-                        <Form.Item label="Số tiền rút">
-                            <Input value={selectedReport.amount} disabled />
+                        <Form.Item label="Last Name">
+                            <Input value={selectedReport.lname} disabled />
                         </Form.Item>
-                        <Form.Item label="Kênh thanh toán">
-                            <Input value={selectedReport.paymentChannel} disabled />
+                        <Form.Item label="Email">
+                            <Input value={selectedReport.email} disabled />
                         </Form.Item>
-                        <Form.Item label="Tài khoản ngân hàng">
-                            <Select defaultValue={selectedReport.bankAccount} disabled>
-                                <Option value="Select">Select</Option>
-                                {/* Add more options as needed */}
-                            </Select>
+                        <Form.Item label="Amount">
+                            <Input value={selectedReport.withdrawTrans.amount} disabled />
                         </Form.Item>
-                        <Form.Item label="Tổng tiền nhận">
-                            <Input value={selectedReport.totalAmount} disabled />
+                        <Form.Item label="Type">
+                            <Input value={selectedReport.withdrawTrans.type} disabled />
+                        </Form.Item>
+                        <Form.Item label="Transaction Status">
+                            <Input value={selectedReport.withdrawTrans.status} disabled />
+                        </Form.Item>
+                        <Form.Item label="Created At">
+                            <Input value={selectedReport.withdrawTrans.createAt} disabled />
                         </Form.Item>
                     </Form>
                 )}

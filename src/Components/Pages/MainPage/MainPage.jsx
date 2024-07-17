@@ -9,6 +9,7 @@ import TeacherCard from "../../UI/Card/TeacherCard";
 import TeacherCardUI from "../../UI/Card/TeacherCard";
 import { FilterOutlined } from "@ant-design/icons";
 import { API_URL } from "../../../config";
+import { getToken } from "../../../utils/common";
 
 function MainPage() {
   const [slideIndex, setSlideIndex] = useState(1);
@@ -17,10 +18,12 @@ function MainPage() {
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
+      const token = getToken("token");
       const response = await fetch(`${API_URL}/app-users/GetAllRecommend`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response && response.ok) {
@@ -84,10 +87,12 @@ function MainPage() {
 
   const handleSearch = async () => {
     try {
+      const token = getToken("token")
       const response = await fetch(`${API_URL}/app-users/SearchTutor/${searchQuery}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response && response.ok) {

@@ -16,7 +16,7 @@ const TeacherFeedback = ({ ratings }) => {
                 className="w-12 h-12 rounded-full"
               />
               <div>
-                <h3 className="font-bold text-gray-700">{`${rating.firstName} ${rating.lastName}`}</h3>
+                <h3 className="font-bold text-gray-700">{`${rating.lastName}`}</h3>
                 <p className="text-sm text-gray-500">{rating.date}</p>
                 <p className="my-2">{rating.comment}</p>
               </div>

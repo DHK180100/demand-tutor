@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal } from 'antd';
 import { getPendingUsers, approveUser, rejectUser } from '../../../api'; // Correct path to api.js
 import { API_URL } from '../../../config';
+import { getToken } from '../../Navbar/Navbar';
 
 const ApproveUsers = () => {
   const [confirmData, setConfirmData] = useState([]);
@@ -22,7 +23,7 @@ const ApproveUsers = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        setConfirmData(data.map(user => ({ ...user, status: 'InActive' }))); // Thêm thuộc tính status
+        setConfirmData(data.map(user => ({ ...user, status: 'Pending' }))); // Thêm thuộc tính status
       }
     } catch (error) {
       console.error('Failed to fetch pending users:', error);
@@ -30,24 +31,48 @@ const ApproveUsers = () => {
   };
 
   const handleApprove = async (userId) => {
+    const token = getToken("token");
     try {
-      await approveUser(userId);
-      setConfirmData(prevData => prevData.map(user => 
-        user.appUserid === userId ? { ...user, status: 'Active' } : user
-      ));
+      const response = await fetch(`${API_URL}/app-users/${userId}/ConFirmTutor`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      if (response.ok) {
+        setConfirmData(prevData => prevData.map(user =>
+          user.appUserid === userId ? { ...user, status: 'OKE' } : user
+        ));
+      } else {
+        throw new Error('Failed to confirm user.');
+      }
     } catch (error) {
-      console.error('Failed to approve user:', error);
+      console.error('Failed to confirm user:', error);
+      alert('Failed to confirm user.');
     }
   };
 
   const handleReject = async (userId) => {
+    const token = getToken("token");
     try {
-      await rejectUser(userId);
-      setConfirmData(prevData => prevData.map(user => 
-        user.appUserid === userId ? { ...user, status: 'InActive' } : user
-      ));
+      const response = await fetch(`${API_URL}/app-users/${userId}/RejectTutor`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      if (response.ok) {
+        setConfirmData(prevData => prevData.map(user =>
+          user.appUserid === userId ? { ...user, status: 'Rejected' } : user
+        ));
+      } else {
+        throw new Error('Failed to reject user.');
+      }
     } catch (error) {
       console.error('Failed to reject user:', error);
+      alert('Failed to reject user.');
     }
   };
 
@@ -75,7 +100,7 @@ const ApproveUsers = () => {
       dataIndex: 'status',
       key: 'status',
       render: (text) => (
-        <span>{text === 'Active' ? 'Active' : 'InActive'}</span>
+        <span>{text}</span>
       ),
     },
     {
@@ -83,17 +108,17 @@ const ApproveUsers = () => {
       key: 'actions',
       render: (text, record) => (
         <>
-          <Button 
-            type="primary" 
-            onClick={() => handleApprove(record.appUserid)} 
-            disabled={record.status === 'Active'}
+          <Button
+            type="primary"
+            onClick={() => handleApprove(record.appUserid)}
+            disabled={record.status !== 'Pending'}
           >
             Confirm
           </Button>
-          <Button 
-            type="danger" 
-            onClick={() => handleReject(record.appUserid)} 
-            disabled={record.status === 'InActive'}
+          <Button
+            type="danger"
+            onClick={() => handleReject(record.appUserid)}
+            disabled={record.status !== 'Pending'}
           >
             Reject
           </Button>

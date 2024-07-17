@@ -84,6 +84,7 @@ function ScheduleProfile() {
         }
     };
 
+
     const handleChange = (e, type) => {
         const { value } = e.target;
         setTutorDetails({ ...tutorDetails, [type]: value });

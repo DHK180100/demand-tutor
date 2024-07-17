@@ -10,6 +10,7 @@ function TutorProfilePage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -34,6 +35,37 @@ function TutorProfilePage() {
             }
         })();
     }, []);
+
+    const confirmTutorStatus = async () => {
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
+
+        try {
+            const token = getToken("token");
+            const response = await fetch(`${API_URL}/tutors/${tutorProfile.id}/status/Confirming`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ status: 'Confirming' }) // Adjust payload as per your API requirement
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setSuccess('Tutor status confirmed successfully!');
+            console.log('Tutor status confirmed:', data);
+        } catch (error) {
+            setError('Failed to confirm tutor status');
+            console.error('Failed to confirm tutor status:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const updateTutorProfile = async (updatedTutor) => {
         try {
@@ -111,9 +143,17 @@ function TutorProfilePage() {
                             <p>{tutorProfile.email}</p>
                         </div>
                     </div>
-                    <button
-                        onClick={(e) => handleSubmit(e)}
-                        className="edit-button">EDIT</button>
+                    <div className="profile-buttons">
+                        <button
+                            onClick={(e) => handleSubmit(e)}
+                            className="edit-button">EDIT</button>
+                        <button
+                            onClick={confirmTutorStatus}
+                            className="send-button"
+                            disabled={loading}>
+                            SENT
+                        </button>
+                    </div>
                 </div>
                 <div className='tutor-profile-input-row'>
                     <div className='tutor-profile-input-bars'>

@@ -138,6 +138,7 @@ const WalletPage = () => {
       const data = await response.json();
       console.log('Withdraw application sent successfully:', data);
       setIsModalVisible(false);
+      window.location.reload();
       // Thực hiện các thao tác cần thiết sau khi gửi đơn rút tiền thành công
     } catch (err) {
       console.error('Error sending withdraw application:', err);

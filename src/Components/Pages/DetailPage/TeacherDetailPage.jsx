@@ -41,7 +41,7 @@ const TeacherDetailPage = () => {
       </div>
       <TeacherCard
         tutorID={tutor.tutorID}
-        firstName={`${tutor.firstName} ${tutor.lastName}`}
+        firstName={`${tutor.lastName}`}
         totalHoursHired={`${tutor.totalHoursHired}`}
         percentSuccess={`${tutor.percentSuccess}`}
         price={tutor.price}
